@@ -1,0 +1,15 @@
+{
+ "resultado": "OBJECION",
+ "nombreArchivo": "informe_objecion_20261024_153143.docx",
+ "plantillaKey": "objecion",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:31:43 (ART UTC-3)",
+ "EXPEDIENTE": "1-0047-2002-419570-24-9",
+ "MOTIVO": "Cambio en el método analítico para la determinación de pureza del IFA Insulina glargina, reemplazando la electroforesis SDS-PAGE por cromatografía de exclusión molecular (SEC-HPLC).",
+ "PRODUCTO": "GLARGIFIC 100 UI/mL",
+ "EMPRESA": "Celltech Litoral S.R.L.",
+ "DETALLE": "La empresa no coincide entre documentos: Biofarma Austral S.A. / Celltech Litoral S.R.L. / BIOFARMA AUSTRAL S.A..",
+ "respuestaIA": "PASO 1: Identificación del expediente y producto\n- EXPEDIENTE: 1-0047-2002-419570-24-9\n- PRODUCTO: GLARGIFIC 100 UI/mL\n- EMPRESA: Celltech Litoral S.R.L.\n- IFA: Insulina glargina\n\nPASO 2: Verificación de motivo y tipo de trámite\nEl motivo de la modificación solicitada es el cambio en el método analítico para la determinación de pureza del IFA Insulina glargina, reemplazando la electroforesis SDS-PAGE por cromatografía de exclusión molecular (SEC-HPLC). Corresponde a un trámite de Modificación Post-Registro (Modalidad: Notificación de cambio en método analítico).\n\nPASO 3: Verificación de documentos mínimos obligatorios\n- ¿Se recibió al menos una Nota de Presentación o documento similar? SI\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente? SI\n- ¿Se recibió el Documento declarado por el regulado (validación del método analítico, CTD 3.2.S.4.3)? SI\n- ¿El motivo de la Nota, la descripción del cambio del Formulario y el alcance del Documento declarado contienen información regulatoria real (no textos ajenos como poemas, canciones o recetas)? SI\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos? NO\n\nPASO 4: Recomendación final\nOBJETAR\n\nCONCLUSIÓN:\nSe recomienda objetar la solicitud debido a la incoherencia en la identificación de la empresa titular entre los documentos presentados (Biofarma Austral S.A. en la Nota de Presentación y Celltech Litoral S.R.L. en el Formulario de Solicitud).",
+ "_segundos": 4.4
+}
