@@ -1,0 +1,15 @@
+{
+ "resultado": "OBJECION",
+ "nombreArchivo": "informe_objecion_20261024_151531.docx",
+ "plantillaKey": "objecion",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:15:31 (ART UTC-3)",
+ "EXPEDIENTE": "PENDIENTE DE CARGA EN FORMULARIO",
+ "MOTIVO": "Modificación post-registro",
+ "PRODUCTO": "NO IDENTIFICADO",
+ "EMPRESA": "NO IDENTIFICADO",
+ "DETALLE": "Documentos obligatorios faltantes: Nota de Presentación (Módulo 1.0); Formulario de Solicitud (Módulo 1.2); Declaración Jurada (Documento declarado por el regulado).",
+ "respuestaIA": "**PASO 1: Identificación del expediente y producto**\n- EXPEDIENTE: 1-0047-2002-493502-24-4\n- PRODUCTO: BIOPROTEX 100 mg/mL\n- EMPRESA: Inmunogen Pampa S.A.\n- IFA: Adalimumab\n\n---\n\n**PASO 2: Verificación de motivo y tipo de trámite**\n- **Motivo de la modificación:** Cambio en el método analítico de identidad del IFA Adalimumab, incorporando mapeo peptídico por LC-MS en reemplazo del isoelectroenfoque.\n- **Tipo de trámite:** Modificación Post-Registro de Productos Biológicos (Modalidad: Notificación de cambio en método analítico).\n\n---\n\n**PASO 3: Verificación de documentos mínimos obligatorios**\n- ¿Se recibió al menos una Nota de Presentación o documento similar? **SI**\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente? **SI**\n- ¿Se recibió documentación de validación del método analítico (ICH Q2)? **SI**\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos? **SI**\n\n---\n\n**PASO 4: Recomendación final**\n**VALIDAR**\n\n---\n\n**CONCLUSIÓN:**\nLa solicitud de modificación post-registro para BIOPROTEX 100 mg/mL presentada por Inmunogen Pampa S.A. cumple con la totalidad de los requisitos formales mínimos y la documentación analítica requerida según ICH Q2(R1), por lo cual resulta procedente su validación.",
+ "_segundos": 74.6
+}
