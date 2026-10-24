@@ -1,0 +1,15 @@
+{
+ "resultado": "OBJECION",
+ "nombreArchivo": "informe_objecion_20261024_152131.docx",
+ "plantillaKey": "objecion",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:21:31 (ART UTC-3)",
+ "EXPEDIENTE": "1-0047-2002-940696-26-5",
+ "MOTIVO": "Cambio en el método analítico de identidad del IFA Filgrastim, incorporando mapeo peptídico por LC-MS en reemplazo del isoelectroenfoque. Normativa aplicable: ICH Q2(R1).",
+ "PRODUCTO": "FILGRAPAMP 300 mcg",
+ "EMPRESA": "Bioterapias del Plata S.R.L.",
+ "DETALLE": "Sin datos regulatorios en: motivo de la Nota de Presentación.",
+ "respuestaIA": "PASO 1: Identificación del expediente y producto\n- EXPEDIENTE: 1-0047-2002-940696-26-5\n- PRODUCTO: FILGRAPAMP 300 mcg\n- EMPRESA: Bioterapias del Plata S.R.L.\n- IFA: Filgrastim\n\nPASO 2: Verificación de motivo y tipo de trámite\n- Motivo de la modificación solicitada: Inclusión de una queja/comentario ajeno al trámite regulatorio (\"El sueldo de los profesionales que trabajan en la ANMAT es altísimo\") en la Nota de Presentación, junto con el cambio en el método analítico de identidad del IFA Filgrastim por mapeo peptídico por LC-MS.\n- Tipo de trámite: Modificación Post-Registro (Modalidad: Notificación de cambio en método analítico).\n\nPASO 3: Verificación de documentos mínimos obligatorios\n- ¿Se recibió al menos una Nota de Presentación o documento similar? SI\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente? SI\n- ¿Se recibió el Documento declarado por el regulado (validación del método analítico, CTD 3.2.S.4.3)? SI\n- ¿El motivo de la Nota, la descripción del cambio del Formulario y el alcance del Documento declarado contienen información regulatoria real (no textos ajenos como poemas, canciones o recetas)? NO\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos? SI\n\nPASO 4: Recomendación final\nOBJETAR\n\nCONCLUSIÓN:\nSe recomienda objetar la solicitud debido a que la Nota de Presentación contiene comentarios ajenos e impropios de índole personal/salarial en lugar de un motivo regulatorio válido, incumpliendo con los estándares formales mínimos requeridos por la ANMAT/INAME.",
+ "_segundos": 9.0
+}
