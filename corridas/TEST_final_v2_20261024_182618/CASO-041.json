@@ -1,0 +1,15 @@
+{
+ "resultado": "OBJECION",
+ "nombreArchivo": "informe_objecion_20261024_153156.docx",
+ "plantillaKey": "objecion",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:31:56 (ART UTC-3)",
+ "EXPEDIENTE": "NO IDENTIFICADO",
+ "MOTIVO": "Cambio en el método analítico para la determinación de pureza del IFA Insulina glargina, reemplazando la electroforesis SDS-PAGE por cromatografía de exclusión molecular (SEC-HPLC).",
+ "PRODUCTO": "GLARGIFIC 100 UI/mL",
+ "EMPRESA": "Laboratorios Farmacéuticos del Sur S.A.",
+ "DETALLE": "Documentos obligatorios faltantes: Formulario de Solicitud (Módulo 1.2). 1 documento(s) no reconocido(s) como documentación regulatoria.",
+ "respuestaIA": "Como evaluador regulatorio de ANMAT/INAME especializado en modificaciones post-registro de productos biológicos, presento la evaluación de los documentos recibidos:\n\n**PASO 1: Identificación del expediente y producto**\n- EXPEDIENTE: NO IDENTIFICADO\n- PRODUCTO: GLARGIFIC 100 UI/mL\n- EMPRESA: Laboratorios Farmacéuticos del Sur S.A.\n- IFA: Insulina glargina\n\n**PASO 2: Verificación de motivo y tipo de trámite**\n- Motivo de la modificación solicitada: Cambio en el método analítico para la determinación de pureza del IFA Insulina glargina, reemplazando la electroforesis SDS-PAGE por cromatografía de exclusión molecular (SEC-HPLC).\n- Tipo de trámite: Modificación post-registro de producto biológico (cambio menor/mayor de control de calidad / método analítico del IFA).\n\n**PASO 3: Verificación de documentos mínimos obligatorios**\n- ¿Se recibió al menos una Nota de Presentación o documento similar? SI\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente? NO (solo se recibió la Nota de Presentación y el Módulo 3 CTD, pero no el Formulario de Solicitud oficial).\n- ¿Se recibió el Documento declarado por el regulado (validación del método analítico, CTD 3.2.S.4.3)? SI\n- ¿El motivo de la Nota, la descripción del cambio del Formulario y el alcance del Documento declarado contienen información regulatoria real (no textos ajenos como poemas, canciones o recetas)? NO (se detectó un texto poético intruso entre los documentos).\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos? SI\n\n**PASO 4: Recomendación final**\n- OBJETAR (debido a la ausencia del Formulario de Solicitud y la presencia de texto ajeno/no regulatorio en el legajo).\n\n**CONCLUSIÓN:**\nSe recomienda **OBJETAR** la solicitud por omisión del Formulario de Solicitud oficial y por incluir fragmentos de texto ajenos a la tramitación regulatoria. El interesado deberá reingresar la presentación completa con la documentación formal requerida y libre de interferencias textuales no regulatorias.",
+ "_segundos": 7.7
+}
