@@ -1,0 +1,15 @@
+{
+ "resultado": "VALIDACION",
+ "nombreArchivo": "informe_validacion_20261024_151912.docx",
+ "plantillaKey": "aceptable",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:19:12 (ART UTC-3)",
+ "EXPEDIENTE": "1-0047-2002-183280-25-8",
+ "MOTIVO": "Cambio en el método analítico de identidad del IFA Bevacizumab, incorporando mapeo peptídico por LC-MS en reemplazo del isoelectroenfoque.",
+ "PRODUCTO": "BEVASUR 100 mg/4 mL",
+ "EMPRESA": "Inmunogen Pampa S.A.",
+ "DETALLE": "",
+ "respuestaIA": "PASO 1: Identificación del expediente y producto\n- EXPEDIENTE: 1-0047-2002-183280-25-8\n- PRODUCTO: BEVASUR 100 mg/4 mL\n- EMPRESA: Inmunogen Pampa S.A.\n- IFA: Bevacizumab\n\nPASO 2: Verificación de motivo y tipo de trámite\n- Motivo de la modificación solicitada: Cambio en el método analítico de identidad del IFA Bevacizumab, incorporando mapeo peptídico por LC-MS en reemplazo del isoelectroenfoque.\n- Tipo de trámite: Modificación Post-Registro (Modalidad: Notificación de cambio en método analítico).\n\nPASO 3: Verificación de documentos mínimos obligatorios\n- ¿Se recibió al menos una Nota de Presentación o documento similar? SI\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente? SI\n- ¿Se recibió el Documento declarado por el regulado (validación del método analítico, CTD 3.2.S.4.3)? SI\n- ¿El motivo de la Nota, la descripción del cambio del Formulario y el alcance del Documento declarado contienen información regulatoria real (no textos ajenos como poemas, canciones o recetas)? SI\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos? SI\n\nPASO 4: Recomendación final\nVALIDAR\n\nCONCLUSIÓN:\nLa solicitud de modificación post-registro presentada por Inmunogen Pampa S.A. cumple satisfactoriamente con los requisitos formales mínimos exigidos. Se recomienda validar el trámite para continuar con su curso técnico regulatorio en el INAME.",
+ "_segundos": 13.8
+}
