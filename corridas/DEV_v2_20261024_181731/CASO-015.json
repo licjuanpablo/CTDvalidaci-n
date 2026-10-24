@@ -1,0 +1,15 @@
+{
+ "resultado": "OBJECION",
+ "nombreArchivo": "informe_objecion_20261024_152115.docx",
+ "plantillaKey": "objecion",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:21:15 (ART UTC-3)",
+ "EXPEDIENTE": "1-0047-2002-131887-26-6",
+ "MOTIVO": "Cambio en el método analítico para la determinación de pureza del IFA Insulina glargina, reemplazando la electroforesis SDS-PAGE por cromatografía de exclusión molecular (SEC-HPLC).",
+ "PRODUCTO": "GLARGIFIC 100 UI/mL",
+ "EMPRESA": "Laboratorios Farmacéuticos del Sur S.A.",
+ "DETALLE": "Documentos obligatorios faltantes: Documento declarado por el regulado. 1 documento(s) no reconocido(s) como documentación regulatoria.",
+ "respuestaIA": "**PASO 1: Identificación del expediente y producto**\n- EXPEDIENTE: 1-0047-2002-131887-26-6\n- PRODUCTO: GLARGIFIC 100 UI/mL\n- EMPRESA: Laboratorios Farmacéuticos del Sur S.A.\n- IFA: Insulina glargina\n\n**PASO 2: Verificación de motivo y tipo de trámite**\n- Motivo: Cambio en el método analítico para la determinación de pureza del IFA Insulina glargina, reemplazando la electroforesis SDS-PAGE por cromatografía de exclusión molecular (SEC-HPLC).\n- Tipo de trámite: Modificación post-registro / Notificación de cambio en método analítico.\n\n**PASO 3: Verificación de documentos mínimos obligatorios**\n- ¿Se recibió al menos una Nota de Presentación o documento similar? SI\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente? SI\n- ¿Se recibió el Documento declarado por el regulado (validación del método analítico, CTD 3.2.S.4.3)? SI\n- ¿El motivo de la Nota, la descripción del cambio del Formulario y el alcance del Documento declarado contienen información regulatoria real (no textos ajenos como poemas, canciones o recetas)? NO (se detectó un texto poético irrelevante al final de los documentos).\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos? SI\n\n**PASO 4: Recomendación final**\n- OBJETAR\n\n**CONCLUSIÓN:**\nLa solicitud se rechaza formalmente debido a la inclusión de texto no regulatorio ajeno al trámite (fragmento poético). Se requiere la reemisión de la documentación limpia y ajustada a los estándares regulatorios de ANMAT/INAME.",
+ "_segundos": 10.4
+}
