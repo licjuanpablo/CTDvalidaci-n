@@ -1,0 +1,15 @@
+{
+ "resultado": "OBJECION",
+ "nombreArchivo": "informe_objecion_20261024_151314.docx",
+ "plantillaKey": "objecion",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:13:14 (ART UTC-3)",
+ "EXPEDIENTE": "PENDIENTE DE CARGA EN FORMULARIO",
+ "MOTIVO": "Modificación post-registro",
+ "PRODUCTO": "NO IDENTIFICADO",
+ "EMPRESA": "NO IDENTIFICADO",
+ "DETALLE": "Documentos obligatorios faltantes: Nota de Presentación (Módulo 1.0); Formulario de Solicitud (Módulo 1.2); Declaración Jurada (Documento declarado por el regulado).",
+ "respuestaIA": "**PASO 1: Identificación del expediente y producto**\n- EXPEDIENTE: 1-0047-2002-788477-26-5\n- PRODUCTO: TRASTUFIC 150 mg\n- EMPRESA: Laboratorios Farmacéuticos del Sur S.A.\n- IFA: Trastuzumab\n\n**PASO 2: Verificación de motivo y tipo de trámite**\n- Motivo de la modificación: Cambio en el método analítico para la determinación de potencia biológica del IFA Trastuzumab, pasando del bioensayo celular al método de citometría de flujo validado según ICH Q2(R1).\n- Tipo de trámite: Modificación post-registro de producto biológico (Notificación de cambio en método analítico).\n\n**PASO 3: Verificación de documentos mínimos obligatorios**\n- ¿Se recibió al menos una Nota de Presentación o documento similar?: SI\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente?: SI\n- ¿Se recibió documentación de validación del método analítico (ICH Q2)?: SI\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos?: NO\n\n*(Nota de evaluación: Se detecta una incoherencia crítica en el documento del CTD Módulo 3, el cual hace referencia al producto \"BEVASUR 100 mg/4 mL\", mientras que la Nota de Presentación y el Formulario de Solicitud corresponden al producto \"TRASTUFIC 150 mg\").*\n\n**PASO 4: Recomendación final**\n- Recomendación: OBJETAR\n\n**CONCLUSIÓN:**\nLa solicitud no cumple con los requisitos formales mínimos debido a una incoherencia en la identificación del producto dentro de la documentación técnica presentada (mención errónea de otro producto en el informe de validación). Por lo tanto, se recomienda formular objeción regulatoria.",
+ "_segundos": 4.0
+}
