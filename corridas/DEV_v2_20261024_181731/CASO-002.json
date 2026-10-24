@@ -1,0 +1,15 @@
+{
+ "resultado": "OBJECION",
+ "nombreArchivo": "informe_objecion_20261024_151754.docx",
+ "plantillaKey": "objecion",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:17:54 (ART UTC-3)",
+ "EXPEDIENTE": "1-0047-2002-844092-25-7",
+ "MOTIVO": "Cambio en el método analítico para la determinación de proteínas de célula huésped en el IFA Trastuzumab, pasando de ELISA comercial a ELISA específico de proceso.",
+ "PRODUCTO": "TRASTUFIC 150 mg",
+ "EMPRESA": "Bioterapias del Plata S.R.L.",
+ "DETALLE": "Sin datos regulatorios en: descripción del cambio del Formulario de Solicitud.",
+ "respuestaIA": "Como evaluador regulatorio de ANMAT/INAME especializado en productos biológicos, presento el análisis formal de la solicitud de modificación post-registro:\n\n**PASO 1: Identificación del expediente y producto**\n- EXPEDIENTE: 1-0047-2002-844092-25-7\n- PRODUCTO: TRASTUFIC 150 mg\n- EMPRESA: Bioterapias del Plata S.R.L.\n- IFA: Trastuzumab\n\n**PASO 2: Verificación de motivo y tipo de trámite**\n- **Motivo de la modificación:** Cambio en el método analítico para la determinación de proteínas de célula huésped en el IFA Trastuzumab, pasando de un ELISA comercial a un ELISA específico de proceso.\n- **Tipo de trámite:** Modificación post-registro (Notificación de cambio en método analítico).\n\n**PASO 3: Verificación de documentos mínimos obligatorios**\n- ¿Se recibió al menos una Nota de Presentación o documento similar?: SI\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente?: SI\n- ¿Se recibió el Documento declarado por el regulado (validación del método analítico, CTD 3.2.S.4.3)?: SI\n- ¿El motivo de la Nota, la descripción del cambio del Formulario y el alcance del Documento declarado contienen información regulatoria real (no textos ajenos como poemas, canciones o recetas)?: **NO** (La Sección 4 del Formulario de Solicitud contiene texto improcedente ajeno al trámite regulatorio: *\"El sueldo de los profesionales que trabajan en la ANMAT es altísimo\"*).\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos?: SI\n\n**PASO 4: Recomendación final**\n- **OBJETAR** (debido a que la Sección 4 del formulario no contiene la descripción regulatoria correspondiente y presenta información ajena a la tramitación oficial).\n\n**CONCLUSIÓN:**\nSe objeta la solicitud de modificación post-registro debido a que la Sección 4 del Formulario de Solicitud contiene información impertinente y ajena al ámbito regulatorio, incumpliendo los requisitos formales mínimos de presentación establecidos por la ANMAT/INAME.",
+ "_segundos": 10.7
+}
