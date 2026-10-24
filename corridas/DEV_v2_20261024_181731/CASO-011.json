@@ -1,0 +1,15 @@
+{
+ "resultado": "OBJECION",
+ "nombreArchivo": "informe_objecion_20261024_151920.docx",
+ "plantillaKey": "objecion",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:19:20 (ART UTC-3)",
+ "EXPEDIENTE": "NO IDENTIFICADO",
+ "MOTIVO": "NO IDENTIFICADO",
+ "PRODUCTO": "FILGRAPAMP 300 mcg",
+ "EMPRESA": "BIOFARMA AUSTRAL S.A.",
+ "DETALLE": "Documentos obligatorios faltantes: Nota de Presentación (Módulo 1.0); Formulario de Solicitud (Módulo 1.2).",
+ "respuestaIA": "En mi carácter de evaluador regulatorio de ANMAT/INAME especializado en modificaciones post-registro de productos biológicos, procedo a realizar la evaluación de los documentos presentados:\n\nPASO 1: Identificación del expediente y producto\n- EXPEDIENTE: NO IDENTIFICADO\n- PRODUCTO: FILGRAPAMP 300 mcg\n- EMPRESA: BIOFARMA AUSTRAL S.A.\n- IFA: Filgrastim\n\nPASO 2: Verificación de motivo y tipo de trámite\n- Motivo de la modificación: Validación del método analítico por citometría de flujo para la determinación de potencia biológica del IFA Filgrastim.\n- Tipo de trámite: Modificación post-registro de producto biológico (actualización/validación de técnica analítica en el marco del CTD Módulo 3, sección 3.2.S.4.3).\n\nPASO 3: Verificación de documentos mínimos obligatorios\n- ¿Se recibió al menos una Nota de Presentación o documento similar? NO\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente? NO\n- ¿Se recibió el Documento declarado por el regulado (validación del método analítico, CTD 3.2.S.4.3)? SI\n- ¿El motivo de la Nota, la descripción del cambio del Formulario y el alcance del Documento declarado contienen información regulatoria real (no textos ajenos como poemas, canciones o recetas)? SI\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos? SI (Se constata la correspondencia entre la empresa y el producto en el documento técnico, aun cuando faltan los formularios formales).\n\nPASO 4: Recomendación final\n- Recomendación: OBJETAR (debido a la ausencia de la Nota de Presentación y del Formulario de Solicitud oficiales).\n\nCONCLUSIÓN:\nLa solicitud debe ser objetada formalmente por omisión de los documentos administrativos obligatorios (Nota de Presentación y Formulario de Solicitud), a pesar de que el informe técnico de validación analítica (CTD 3.2.S.4.3) cumple con los parámetros exigidos por la normativa vigente.",
+ "_segundos": 8.0
+}
