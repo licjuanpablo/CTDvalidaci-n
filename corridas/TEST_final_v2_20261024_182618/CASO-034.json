@@ -1,0 +1,15 @@
+{
+ "resultado": "OBJECION",
+ "nombreArchivo": "informe_objecion_20261024_153048.docx",
+ "plantillaKey": "objecion",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:30:48 (ART UTC-3)",
+ "EXPEDIENTE": "1-0047-2002-209223-24-4",
+ "MOTIVO": "Cambio en el método analítico para la determinación de potencia biológica del IFA Insulina glargina, pasando del bioensayo celular al método de citometría de flujo validado según ICH Q2(R1). Normativa aplicable: ICH Q2(R1).",
+ "PRODUCTO": "GLARGIFIC 100 UI/mL",
+ "EMPRESA": "Andes Biologics S.A.",
+ "DETALLE": "Sin datos regulatorios en: motivo de la Nota de Presentación.",
+ "respuestaIA": "**PASO 1: Identificación del expediente y producto**\n- EXPEDIENTE: 1-0047-2002-209223-24-4\n- PRODUCTO: GLARGIFIC 100 UI/mL\n- EMPRESA: Andes Biologics S.A.\n- IFA: Insulina glargina\n\n**PASO 2: Verificación de motivo y tipo de trámite**\n- Motivo de la modificación solicitada: Cambio en el método analítico para la determinación de potencia biológica del IFA Insulina glargina, pasando del bioensayo celular al método de citometría de flujo validado según ICH Q2(R1). *(Nota: La Nota de Presentación incluye una mención ajena a la materia regulatoria, pero el motivo formal se describe en el Formulario y la documentación técnica).*\n- Tipo de trámite: Modificación Post-Registro (Modalidad: Notificación de cambio en método analítico).\n\n**PASO 3: Verificación de documentos mínimos obligatorios**\n- ¿Se recibió al menos una Nota de Presentación o documento similar? SI\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente? SI\n- ¿Se recibió el Documento declarado por el regulado (validación del método analítico, CTD 3.2.S.4.3)? SI\n- ¿El motivo de la Nota, la descripción del cambio del Formulario y el alcance del Documento declarado contienen información regulatoria real (no textos ajenos como poemas, canciones o recetas)? NO (La Nota de Presentación contiene una frase impropia y ajena a la materia regulatoria en el apartado del motivo).\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos? SI\n\n**PASO 4: Recomendación final**\n- OBJETAR\n\n**CONCLUSIÓN:**\nLa solicitud no cumple con los requisitos formales mínimos debido a la inclusión de declaraciones ajenas a la materia regulatoria en la Nota de Presentación, por lo que corresponde emitir un pliego de objeciones.",
+ "_segundos": 6.9
+}
