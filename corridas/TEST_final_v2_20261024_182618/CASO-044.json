@@ -1,0 +1,15 @@
+{
+ "resultado": "VALIDACION",
+ "nombreArchivo": "informe_validacion_20261024_153242.docx",
+ "plantillaKey": "aceptable",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:32:42 (ART UTC-3)",
+ "EXPEDIENTE": "NO IDENTIFICADO",
+ "MOTIVO": "Cambio en el método analítico para la determinación de potencia biológica del IFA Somatropina, pasando del bioensayo celular al método de citometría de flujo validado según ICH Q2(R1).",
+ "PRODUCTO": "SOMATRAL 5 mg",
+ "EMPRESA": "Bioterapias del Plata S.R.L.",
+ "DETALLE": "",
+ "respuestaIA": "**PASO 1: Identificación del expediente y producto**\n- EXPEDIENTE: NO IDENTIFICADO\n- PRODUCTO: SOMATRAL 5 mg\n- EMPRESA: Bioterapias del Plata S.R.L.\n- IFA: Somatropina\n\n**PASO 2: Verificación de motivo y tipo de trámite**\n- Motivo de la modificación: Cambio en el método analítico para la determinación de potencia biológica del IFA Somatropina, pasando del bioensayo celular al método de citometría de flujo validado según ICH Q2(R1).\n- Tipo de trámite: Modificación Post-Registro (Notificación de cambio en método analítico).\n\n**PASO 3: Verificación de documentos mínimos obligatorios**\n- ¿Se recibió al menos una Nota de Presentación o documento similar? SI\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente? SI\n- ¿Se recibió el Documento declarado por el regulado (validación del método analítico, CTD 3.2.S.4.3)? SI\n- ¿El motivo de la Nota, la descripción del cambio del Formulario y el alcance del Documento declarado contienen información regulatoria real (no textos ajenos como poemas, canciones o recetas)? SI\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos? SI\n\n**PASO 4: Recomendación final**\n- VALIDAR\n\n**CONCLUSIÓN:**\nLa solicitud de modificación post-registro presentada por Bioterapias del Plata S.R.L. cumple con los requisitos formales mínimos exigidos para la notificación del cambio de método analítico, demostrando coherencia documental y la presentación de la validación técnica correspondiente.",
+ "_segundos": 8.7
+}
