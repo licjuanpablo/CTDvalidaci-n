@@ -1,0 +1,15 @@
+{
+ "resultado": "VALIDACION",
+ "nombreArchivo": "informe_validacion_20261024_152027.docx",
+ "plantillaKey": "aceptable",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:20:27 (ART UTC-3)",
+ "EXPEDIENTE": "1-0047-2002-434764-24-1",
+ "MOTIVO": "Cambio en el método analítico de identidad del IFA Filgrastim, incorporando mapeo peptídico por LC-MS en reemplazo del isoelectroenfoque.",
+ "PRODUCTO": "FILGRAPAMP 300 mcg",
+ "EMPRESA": "Biofarma Austral S.A.",
+ "DETALLE": "",
+ "respuestaIA": "Como evaluador regulatorio de ANMAT/INAME especializado en modificaciones post-registro de productos biológicos, presento el análisis formal de la solicitud:\n\n**PASO 1: Identificación del expediente y producto**\n- EXPEDIENTE: 1-0047-2002-434764-24-1\n- PRODUCTO: FILGRAPAMP 300 mcg\n- EMPRESA: Biofarma Austral S.A.\n- IFA: Filgrastim\n\n**PASO 2: Verificación de motivo y tipo de trámite**\n- Motivo de la modificación: Cambio en el método analítico de identidad del IFA Filgrastim, incorporando mapeo peptídico por LC-MS en reemplazo del isoelectroenfoque, conforme a ICH Q2(R1).\n- Tipo de trámite: Modificación Post-Registro (Modalidad: Notificación de cambio en método analítico).\n\n**PASO 3: Verificación de documentos mínimos obligatorios**\n- ¿Se recibió al menos una Nota de Presentación o documento similar?: SI\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente?: SI\n- ¿Se recibió el Documento declarado por el regulado (validación del método analítico, CTD 3.2.S.4.3)?: SI\n- ¿El motivo de la Nota, la descripción del cambio del Formulario y el alcance del Documento declarado contienen información regulatoria real (no textos ajenos como poemas, canciones o recetas)?: SI\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos?: SI\n\n**PASO 4: Recomendación final**\n- VALIDAR\n\n**CONCLUSIÓN:**\nLa solicitud de modificación post-registro presentada por Biofarma Austral S.A. cumple satisfactoriamente con los requisitos formales mínimos y la documentación técnica obligatoria exigida por la normativa vigente, demostrando plena coherencia entre los documentos evaluados y un adecuado respaldo analítico según ICH Q2(R1).",
+ "_segundos": 56.5
+}
