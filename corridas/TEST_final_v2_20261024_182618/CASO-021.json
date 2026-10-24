@@ -1,0 +1,15 @@
+{
+ "resultado": "VALIDACION",
+ "nombreArchivo": "informe_validacion_20261024_152829.docx",
+ "plantillaKey": "aceptable",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:28:29 (ART UTC-3)",
+ "EXPEDIENTE": "1-0047-2002-385972-25-4",
+ "MOTIVO": "Cambio en el método analítico para la determinación de pureza del IFA Insulina glargina, reemplazando la electroforesis SDS-PAGE por cromatografía de exclusión molecular (SEC-HPLC).",
+ "PRODUCTO": "GLARGIFIC 100 UI/mL",
+ "EMPRESA": "Inmunogen Pampa S.A.",
+ "DETALLE": "",
+ "respuestaIA": "**PASO 1: Identificación del expediente y producto**\n- EXPEDIENTE: 1-0047-2002-385972-25-4\n- PRODUCTO: GLARGIFIC 100 UI/mL\n- EMPRESA: Inmunogen Pampa S.A.\n- IFA: Insulina glargina\n\n**PASO 2: Verificación de motivo y tipo de trámite**\n- Motivo: Cambio en el método analítico para la determinación de pureza del IFA Insulina glargina, reemplazando la electroforesis SDS-PAGE por cromatografía de exclusión molecular (SEC-HPLC).\n- Tipo de trámite: Modificación post-registro (Notificación de cambio en método analítico).\n\n**PASO 3: Verificación de documentos mínimos obligatorios**\n- ¿Se recibió al menos una Nota de Presentación o documento similar? SI\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente? SI\n- ¿Se recibió el Documento declarado por el regulado (validación del método analítico, CTD 3.2.S.4.3)? SI\n- ¿El motivo de la Nota, la descripción del cambio del Formulario y el alcance del Documento declarado contienen información regulatoria real (no textos ajenos como poemas, canciones o recetas)? SI\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos? SI\n\n**PASO 4: Recomendación final**\n- Recomendación: VALIDAR\n\n**CONCLUSIÓN:**\nLa solicitud de modificación post-registro presentada por Inmunogen Pampa S.A. cumple satisfactoriamente con los requisitos formales mínimos y la documentación técnica exigida por la normativa aplicable, por lo que se recomienda dar curso favorable a su tramitación.",
+ "_segundos": 4.9
+}
