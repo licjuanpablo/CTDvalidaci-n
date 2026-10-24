@@ -1,0 +1,15 @@
+{
+ "resultado": "OBJECION",
+ "nombreArchivo": "informe_objecion_20261024_153314.docx",
+ "plantillaKey": "objecion",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:33:14 (ART UTC-3)",
+ "EXPEDIENTE": "1-0047-2002-986056-25-1",
+ "MOTIVO": "Cambio en el método analítico para la determinación de potencia biológica del IFA Somatropina, pasando del bioensayo celular al método de citometría de flujo validado según ICH Q2(R1).",
+ "PRODUCTO": "SOMATRAL 5 mg",
+ "EMPRESA": "Inmunogen Pampa S.A.",
+ "DETALLE": "Sin datos regulatorios en: alcance del Documento declarado por el regulado.",
+ "respuestaIA": "PASO 1: Identificación del expediente y producto\n- EXPEDIENTE: 1-0047-2002-986056-25-1\n- PRODUCTO: SOMATRAL 5 mg\n- EMPRESA: Inmunogen Pampa S.A.\n- IFA: Somatropina\n\nPASO 2: Verificación de motivo y tipo de trámite\nEl motivo de la modificación solicitada es el cambio en el método analítico para la determinación de potencia biológica del IFA Somatropina, pasando del bioensayo celular al método de citometría de flujo validado según ICH Q2(R1). Corresponde a un trámite de Modificación Post-Registro bajo la modalidad de notificación de cambio en método analítico.\n\nPASO 3: Verificación de documentos mínimos obligatorios\n- ¿Se recibió al menos una Nota de Presentación o documento similar? SI\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente? SI\n- ¿Se recibió el Documento declarado por el regulado (validación del método analítico, CTD 3.2.S.4.3)? SI\n- ¿El motivo de la Nota, la descripción del cambio del Formulario y el alcance del Documento declarado contienen información regulatoria real (no textos ajenos como poemas, canciones o recetas)? NO\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos? SI\n\nPASO 4: Recomendación final\nOBJETAR\n\nCONCLUSIÓN:\nSe recomienda objetar la solicitud debido a que el documento declarado por el regulado contiene una alteración en el alcance del Módulo 3 (introducción de texto ajeno e impertinente sobre los salarios de la ANMAT), lo cual invalida el cumplimiento de los requisitos formales mínimos.",
+ "_segundos": 5.4
+}
