@@ -1,0 +1,15 @@
+{
+ "resultado": "OBJECION",
+ "nombreArchivo": "informe_objecion_20261024_151257.docx",
+ "plantillaKey": "objecion",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:12:57 (ART UTC-3)",
+ "EXPEDIENTE": "PENDIENTE DE CARGA EN FORMULARIO",
+ "MOTIVO": "Modificación post-registro",
+ "PRODUCTO": "NO IDENTIFICADO",
+ "EMPRESA": "NO IDENTIFICADO",
+ "DETALLE": "Documentos obligatorios faltantes: Nota de Presentación (Módulo 1.0); Formulario de Solicitud (Módulo 1.2); Declaración Jurada (Documento declarado por el regulado).",
+ "respuestaIA": "PASO 1: Identificación del expediente y producto\n- EXPEDIENTE: NO IDENTIFICADO\n- PRODUCTO: NO IDENTIFICADO\n- EMPRESA: Biofarma Austral S.A.\n- IFA: NO IDENTIFICADO\n\nPASO 2: Verificación de motivo y tipo de trámite\nMotivo de la modificación solicitada: Cambio en el método analítico para la determinación de proteínas de célula huésped en el IFA Bevacizumab, pasando de ELISA comercial a ELISA específico de proceso.\nTipo de trámite: Modificación Post-Registro (Notificación de cambio en método analítico).\n\nPASO 3: Verificación de documentos mínimos obligatorios\n- ¿Se recibió al menos una Nota de Presentación o documento similar? SI\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente? SI\n- ¿Se recibió documentación de validación del método analítico (ICH Q2)? SI\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos? SI\n\nPASO 4: Recomendación final\nRecomiendo VALIDAR.\n\nCONCLUSIÓN:\nLa solicitud de modificación post-registro cumple con los requisitos formales mínimos y la documentación técnica obligatoria requerida. Los datos analizados son coherentes y la validación del método analítico se ajusta a la normativa aplicable (ICH Q2(R1)), por lo que el trámite es apto para continuar su curso regulatorio.",
+ "_segundos": 3.4
+}
