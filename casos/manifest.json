@@ -1,0 +1,24 @@
+{
+  "seed": 2026,
+  "n": 60,
+  "dev": 19,
+  "test": 41,
+  "ground_truth_sha256": "a1d5957d4d61995fdad7ae2c1b9b302f94c197f80e3e208fa8067187b9b736c1",
+  "escenarios": {
+    "completo_pdf": "Completo, los 3 documentos en PDF -> VALIDAR",
+    "completo_escaneado": "Completo, escaneado (JPG/PNG/TIFF) -> VALIDAR",
+    "completo_ruidoso": "Completo, escaneo de baja calidad (rotado/ruido) -> VALIDAR",
+    "completo_sin_nro_exp": "Completo, el formulario no consigna N° de expediente -> VALIDAR",
+    "falta_nota": "Falta la nota de presentación -> OBJETAR",
+    "falta_formulario": "Falta el formulario de solicitud -> OBJETAR",
+    "falta_declaracion": "Falta el documento declarado por el regulado -> OBJETAR",
+    "falta_varios": "Solo llega un documento -> OBJETAR",
+    "nota_texto_ajeno": "Nota con poema/canción en lugar del motivo -> OBJETAR",
+    "formulario_texto_ajeno": "Formulario con texto ajeno en la descripción del cambio -> OBJETAR",
+    "declaracion_texto_ajeno": "Documento del regulado con texto ajeno en el alcance -> OBJETAR",
+    "documento_ajeno": "Un documento entero sin relación (poema/receta) en lugar de uno obligatorio -> OBJETAR",
+    "producto_inconsistente": "El producto no coincide entre documentos -> OBJETAR",
+    "empresa_inconsistente": "La empresa no coincide entre documentos -> OBJETAR",
+    "formato_no_soportado": "Un documento obligatorio en .docx -> OBJETAR"
+  }
+}
