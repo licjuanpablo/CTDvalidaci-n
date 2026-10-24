@@ -1,0 +1,15 @@
+{
+ "resultado": "OBJECION",
+ "nombreArchivo": "informe_objecion_20261024_152626.docx",
+ "plantillaKey": "objecion",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:26:26 (ART UTC-3)",
+ "EXPEDIENTE": "NO IDENTIFICADO",
+ "MOTIVO": "Cambio en el método analítico para la determinación de pureza del IFA Rituximab, reemplazando la electroforesis SDS-PAGE por cromatografía de exclusión molecular (SEC-HPLC).",
+ "PRODUCTO": "RITUXAN-AR 500 mg",
+ "EMPRESA": "Laboratorios Farmacéuticos del Sur S.A.",
+ "DETALLE": "Documentos obligatorios faltantes: Formulario de Solicitud (Módulo 1.2).",
+ "respuestaIA": "PASO 1: Identificación del expediente y producto\n- EXPEDIENTE: NO IDENTIFICADO\n- PRODUCTO: RITUXAN-AR 500 mg\n- EMPRESA: Laboratorios Farmacéuticos del Sur S.A.\n- IFA: Rituximab\n\nPASO 2: Verificación de motivo y tipo de trámite\n- Motivo de la modificación solicitada: Cambio en el método analítico para la determinación de pureza del IFA Rituximab, reemplazando la electroforesis SDS-PAGE por cromatografía de exclusión molecular (SEC-HPLC).\n- Tipo de trámite: Modificación post-registro de producto biológico (cambio menor/mayor en el método analítico del control de calidad del IFA).\n\nPASO 3: Verificación de documentos mínimos obligatorios\n- ¿Se recibió al menos una Nota de Presentación o documento similar? SI\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente? NO\n- ¿Se recibió el Documento declarado por el regulado (validación del método analítico, CTD 3.2.S.4.3)? SI\n- ¿El motivo de la Nota, la descripción del cambio del Formulario y el alcance del Documento declarado contienen información regulatoria real (no textos ajenos como poemas, canciones o recetas)? SI\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos? SI\n\nPASO 4: Recomendación final\nOBJETAR.\n\nCONCLUSIÓN:\nSe recomienda objetar la solicitud debido a la ausencia del Formulario de Solicitud oficial con los datos del expediente, documento mínimo indispensable para iniciar la tramitación formal ante la ANMAT/INAME, a pesar de contar con la Nota de Presentación y el respaldo técnico correspondiente en el CTD Módulo 3.",
+ "_segundos": 8.2
+}
