@@ -1,0 +1,15 @@
+{
+ "resultado": "OBJECION",
+ "nombreArchivo": "informe_objecion_20261024_151321.docx",
+ "plantillaKey": "objecion",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:13:21 (ART UTC-3)",
+ "EXPEDIENTE": "PENDIENTE DE CARGA EN FORMULARIO",
+ "MOTIVO": "Modificación post-registro",
+ "PRODUCTO": "NO IDENTIFICADO",
+ "EMPRESA": "NO IDENTIFICADO",
+ "DETALLE": "Documentos obligatorios faltantes: Nota de Presentación (Módulo 1.0); Formulario de Solicitud (Módulo 1.2); Declaración Jurada (Documento declarado por el regulado).",
+ "respuestaIA": "PASO 1: Identificación del expediente y producto\n- EXPEDIENTE: NO IDENTIFICADO\n- PRODUCTO: BEVASUR 100 mg/4 mL\n- EMPRESA: Bioterapias del Plata S.R.L.\n- IFA: Bevacizumab\n\nPASO 2: Verificación de motivo y tipo de trámite\n- Motivo de la modificación solicitada: Cambio en el método analítico para la determinación de potencia biológica del IFA Bevacizumab, pasando del bioensayo celular al método de citometría de flujo validado según ICH Q2(R1).\n- Tipo de trámite: Modificación post-registro de producto biológico (Cambio menor/mayor en el proceso de control de calidad / especificaciones del principio activo).\n\nPASO 3: Verificación de documentos mínimos obligatorios\n- ¿Se recibió al menos una Nota de Presentación o documento similar? SI\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente? SI\n- ¿Se recibió documentación de validación del método analítico (ICH Q2)? SI\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos? SI\n\nPASO 4: Recomendación final\n- VALIDAR\n\nCONCLUSIÓN:\nLa solicitud cumple con todos los requisitos formales mínimos y la documentación técnica de respaldo (validación analítica según ICH Q2) presentada por el laboratorio Bioterapias del Plata S.R.L. para el producto BEVASUR es coherente, por lo que se recomienda continuar con el trámite de modificación post-registro.",
+ "_segundos": 3.2
+}
