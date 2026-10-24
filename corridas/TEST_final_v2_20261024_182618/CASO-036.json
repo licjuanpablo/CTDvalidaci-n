@@ -1,0 +1,15 @@
+{
+ "resultado": "OBJECION",
+ "nombreArchivo": "informe_objecion_20261024_153101.docx",
+ "plantillaKey": "objecion",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:31:01 (ART UTC-3)",
+ "EXPEDIENTE": "1-0047-2002-929910-25-6",
+ "MOTIVO": "Cambio en el método analítico para la determinación de pureza del IFA Adalimumab, reemplazando la electroforesis SDS-PAGE por cromatografía de exclusión molecular (SEC-HPLC). Normativa aplicable: ICH Q2(R1).",
+ "PRODUCTO": "BIOPROTEX 100 mg/mL",
+ "EMPRESA": "Vacunas Patagónicas S.A.",
+ "DETALLE": "Sin datos regulatorios en: motivo de la Nota de Presentación.",
+ "respuestaIA": "PASO 1: Identificación del expediente y producto\n- EXPEDIENTE: 1-0047-2002-929910-25-6\n- PRODUCTO: BIOPROTEX 100 mg/mL\n- EMPRESA: Vacunas Patagónicas S.A.\n- IFA: Adalimumab\n\nPASO 2: Verificación de motivo y tipo de trámite\n- Motivo de la modificación solicitada: El texto de la Nota de Presentación incluye una declaración ajena al trámite (\"El sueldo de los profesionales que trabajan en la ANMAT es altísimo\"), aunque técnicamente describe un cambio en el método analítico para la determinación de pureza del IFA Adalimumab (reemplazo de SDS-PAGE por SEC-HPLC).\n- Tipo de trámite: Modificación Post-Registro (Notificación de cambio en método analítico).\n\nPASO 3: Verificación de documentos mínimos obligatorios\n- ¿Se recibió al menos una Nota de Presentación o documento similar? SI\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente? SI\n- ¿Se recibió el Documento declarado por el regulado (validación del método analítico, CTD 3.2.S.4.3)? SI\n- ¿El motivo de la Nota, la descripción del cambio del Formulario y el alcance del Documento declarado contienen información regulatoria real (no textos ajenos como poemas, canciones o recetas)? NO\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos? SI\n\nPASO 4: Recomendación final\nOBJETAR\n\nCONCLUSIÓN:\nSe recomienda objetar la solicitud debido a que la Nota de Presentación incluye un texto impertinente y ajeno a la materia regulatoria en el campo del motivo del trámite, incumpliendo los estándares formales mínimos de presentación ante la ANMAT.",
+ "_segundos": 7.4
+}
