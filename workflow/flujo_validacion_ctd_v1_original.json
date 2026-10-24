@@ -1,0 +1,635 @@
+{
+ "name": "IA Validación CTD (Cloud) - Corregido",
+ "nodes": [
+  {
+   "parameters": {
+    "jsCode": "const item = $input.first();\nconst binaryKeys = Object.keys(item.binary || {});\n\n// Propagar el campo \"expediente\" (texto del formulario web) a todos los items hijos\nconst expedienteForm = item.json.expediente || item.json.body?.expediente || '';\n\nconst items = binaryKeys.map(key => ({\n  json: {\n    filename: item.binary[key].fileName,\n    expedienteForm: expedienteForm\n  },\n  binary: { data: item.binary[key] }\n}));\n\nreturn items;\n"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -2864,
+    240
+   ],
+   "id": "29bacede-81c0-4218-9182-b11578540bf3",
+   "name": "Split archivos"
+  },
+  {
+   "parameters": {
+    "options": {}
+   },
+   "type": "n8n-nodes-base.splitInBatches",
+   "typeVersion": 3,
+   "position": [
+    -2640,
+    240
+   ],
+   "id": "68449d6b-df41-4551-ae70-c744ef17a068",
+   "name": "Loop Over Items"
+  },
+  {
+   "parameters": {
+    "jsCode": "const item = $input.first();\nconst fileName = item.binary?.data?.fileName || '';\nconst mimeType = item.binary?.data?.mimeType || '';\n\nconst esImagen = mimeType.includes('image') || \n                 fileName.match(/\\.(jpg|jpeg|png|tiff|bmp)$/i);\n\nreturn [{\n  json: {\n    ...item.json,\n    necesitaOCR: !!esImagen,\n    fileName,\n    mimeType\n  },\n  binary: item.binary\n}];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -2608,
+    496
+   ],
+   "id": "942df1c0-7b49-4b2d-8273-0f50f423f43d",
+   "name": "Detectar tipo archivo"
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict",
+      "version": 3
+     },
+     "conditions": [
+      {
+       "id": "09246bdf-4045-4379-84ec-55d6a373f264",
+       "leftValue": "={{ $json.necesitaOCR }}",
+       "rightValue": "",
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {
+     "ignoreCase": false
+    }
+   },
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.3,
+   "position": [
+    -2400,
+    496
+   ],
+   "id": "ecba2c8d-f5d7-4158-b55f-36175e870a51",
+   "name": "¿Necesita OCR?"
+  },
+  {
+   "parameters": {
+    "operation": "pdf",
+    "binaryPropertyName": "={{ Object.keys($binary)[0] }}",
+    "options": {}
+   },
+   "type": "n8n-nodes-base.extractFromFile",
+   "typeVersion": 1.1,
+   "position": [
+    -2176,
+    608
+   ],
+   "id": "ffe6bbd6-db37-4225-b9cf-0c8303bd8b83",
+   "name": "Extract from File"
+  },
+  {
+   "parameters": {},
+   "type": "n8n-nodes-base.merge",
+   "typeVersion": 3.2,
+   "position": [
+    -1984,
+    496
+   ],
+   "id": "3511d2e1-5051-4b61-907c-b9720f144d89",
+   "name": "Merge"
+  },
+  {
+   "parameters": {
+    "jsCode": "const item = $input.first();\n\nif (item.json.candidates) {\n  const texto = item.json.candidates\n    .map(c => (c.content?.parts || []).filter(p => !p.thought).map(p => p.text || '').join('') || '')\n    .join('\\n\\n');\n  return [{ json: { text: texto, source: 'gemini_ocr' } }];\n}\n\nif (item.json.text) {\n  return [{ json: { text: item.json.text, source: 'digital' } }];\n}\n\nreturn [{ json: { text: '', source: 'unknown' } }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -1792,
+    496
+   ],
+   "id": "1f1e28a8-aa5d-4409-bb07-23322cb4d956",
+   "name": "Normalizar texto"
+  },
+  {
+   "parameters": {
+    "jsCode": "const items = $input.all();\nconst data = items.map(item => ({\n  text: item.json.text || '',\n  source: item.json.source || 'unknown',\n  fileName: item.json.fileName || ''\n}));\n\nreturn [{ json: { data } }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -1616,
+    240
+   ],
+   "id": "407ca6dd-0c9b-434e-9d82-50578d5ef1c9",
+   "name": "Obtener todos los textos"
+  },
+  {
+   "parameters": {
+    "jsCode": "const raw = $input.first().json;\nconst respuesta = (raw.candidates?.[0]?.content?.parts || []).filter(p => !p.thought).map(p => p.text || '').join('');   // Gemini 3: puede venir en varias partes\nconst agregado = $('Obtener todos los textos').all()[0]?.json || { data: [] };\n\nconst expedienteFormItems = $('Split archivos').all();\nconst expedienteForm = expedienteFormItems.find(it => it.json?.expedienteForm)?.json?.expedienteForm || '';\n\nconst ahora = new Date();\nconst offsetMs = -3 * 60 * 60 * 1000;\nconst ahora_art = new Date(ahora.getTime() + offsetMs);\nconst pad = n => n.toString().padStart(2, '0');\nconst timestamp = `${ahora_art.getUTCFullYear()}${pad(ahora_art.getUTCMonth()+1)}${pad(ahora_art.getUTCDate())}_${pad(ahora_art.getUTCHours())}${pad(ahora_art.getUTCMinutes())}${pad(ahora_art.getUTCSeconds())}`;\nconst timestampLegible = `${pad(ahora_art.getUTCDate())}/${pad(ahora_art.getUTCMonth()+1)}/${ahora_art.getUTCFullYear()} ${pad(ahora_art.getUTCHours())}:${pad(ahora_art.getUTCMinutes())}:${pad(ahora_art.getUTCSeconds())} (ART UTC-3)`;\nconst meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];\n\nconst cantidadDocs = (agregado.data || []).length;\n\nfunction normalizar(str) {\n  return str.toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').replace(/[^\\w\\s\\.]/g, ' ');\n}\n\n// ── CLASIFICACIÓN POR ENCABEZADO (solo primeros 500 caracteres) ──\nfunction identificarTipoDocumento(textoCompleto) {\n  const encabezado = textoCompleto.substring(0, 500);\n  const encabezadoNorm = normalizar(encabezado);\n  \n  // Nota de Presentación\n  if (encabezadoNorm.includes('motivo del tramite') ||\n      encabezadoNorm.includes('direccion de evaluacion y control de biologicos') ||\n      encabezadoNorm.includes('se dirige a ud') ||\n      encabezadoNorm.includes('solicitar autorizacion')) {\n    return 'nota';\n  }\n  \n  // Formulario de Solicitud\n  // FIX #2: se agregaron variantes de encabezado reales (\"Ficha de Modificaciones\",\n  // \"Modificación de aprobación anterior\") porque el PDF real no usa el texto\n  // \"1.2 Formulario de solicitud\" en el encabezado y el documento quedaba sin clasificar.\n  if (encabezadoNorm.includes('1.2 formulario de solicitud') ||\n      encabezadoNorm.includes('antecedentes y descripcion de los cambios') ||\n      encabezadoNorm.includes('autorizado vs propuesto') ||\n      encabezadoNorm.includes('ficha de modificaciones') ||\n      encabezadoNorm.includes('modificacion de aprobacion anterior')) {\n    return 'formulario';\n  }\n  \n  // Declaración Jurada\n  if (encabezadoNorm.includes('declaracion jurada') ||\n      (encabezadoNorm.includes('datos generales') && encabezadoNorm.includes('tipo de tramite'))) {\n    return 'declaracion';\n  }\n  \n  return null; // Documento no reconocido (como el poema)\n}\n\n// ── VERIFICACIÓN DE DOCUMENTOS OBLIGATORIOS (SIEMPRE ACTIVA) ──\nfunction verificarDocumentos(listaDocs) {\n  const tiposEncontrados = new Set(\n    listaDocs.map(d => identificarTipoDocumento(d.text || '')).filter(Boolean)\n  );\n  \n  const requeridos = [\n    { tipo: 'nota', nombre: 'Nota de Presentación (Módulo 1.0)' },\n    { tipo: 'formulario', nombre: 'Formulario de Solicitud (Módulo 1.2)' },\n    { tipo: 'declaracion', nombre: 'Declaración Jurada (Documento declarado por el regulado)' }\n  ];\n  \n  return requeridos.filter(r => !tiposEncontrados.has(r.tipo)).map(r => r.nombre);\n}\n\n// ── VERIFICAR SI HAY DOCUMENTOS NO RECONOCIDOS ──\nfunction hayDocumentosInvalidos(listaDocs) {\n  return listaDocs.filter(d => identificarTipoDocumento(d.text || '') === null);\n}\n\n// ── EXTRACCIÓN DE DATOS ──\nfunction extraerDeDocumentos(listaDocs, tipoDoc, patron) {\n  const doc = listaDocs.find(d => identificarTipoDocumento(d.text || '') === tipoDoc);\n  if (!doc) return '';\n  const match = doc.text.match(patron);\n  return match ? match[1].trim() : '';\n}\n\n// FIX #1: el motivo puede venir partido en varias líneas dentro del PDF\n// (ej. \"Modificación de\\nenvases y/o presentación de expendio.\"). Antes el regex\n// cortaba en el primer salto de línea. Ahora captura todo hasta \"N° RECIBO\"\n// o hasta una línea en blanco, y luego colapsa los saltos de línea en espacios.\nfunction extraerMotivo(listaDocs) {\n  const nota = listaDocs.find(d => identificarTipoDocumento(d.text || '') === 'nota');\n  if (!nota) return '';\n  const match = nota.text.match(/MOTIVO DEL TRÁMITE:\\s*([\\s\\S]+?)(?:\\n\\s*N°\\s*RECIBO|\\r?\\n\\r?\\n|$)/i);\n  if (match) {\n    return match[1].replace(/\\s*\\n\\s*/g, ' ').trim();\n  }\n  return '';\n}\n\nfunction extraerEmpresa(listaDocs) {\n  const dj = listaDocs.find(d => identificarTipoDocumento(d.text || '') === 'declaracion');\n  if (!dj) return '';\n  const match = dj.text.match(/Laboratorio:\\s*([^\\n]+)/i);\n  return match ? match[1].trim() : '';\n}\n\nfunction extraerProducto(listaDocs) {\n  const dj = listaDocs.find(d => identificarTipoDocumento(d.text || '') === 'declaracion');\n  if (!dj) return '';\n  const match = dj.text.match(/Nombre comercial:\\s*([^\\n]+)/i);\n  return match ? match[1].trim() : '';\n}\n\n// ── VERIFICACIÓN DE COHERENCIA ──\nfunction verificarCoherencia(listaDocs) {\n  const productos = new Set();\n  const empresas = new Set();\n  \n  listaDocs.forEach(doc => {\n    const tipo = identificarTipoDocumento(doc.text || '');\n    if (tipo === 'nota' || tipo === 'formulario' || tipo === 'declaracion') {\n      const producto = extraerProducto([doc]);\n      const empresa = extraerEmpresa([doc]);\n      if (producto) productos.add(producto.toUpperCase());\n      if (empresa) empresas.add(empresa.toUpperCase());\n    }\n  });\n  \n  return {\n    coherente: productos.size <= 1 && empresas.size <= 1,\n    productos: Array.from(productos),\n    empresas: Array.from(empresas)\n  };\n}\n\nfunction clasificarTramite(motivo) {\n  const t = normalizar(motivo);\n  if (t.includes('nuevo acondicionador')) return 'Nuevo acondicionador secundario';\n  if (t.includes('metodo analitico') || t.includes('procedimiento analitico')) return 'Cambio en método analítico';\n  if (t.includes('metodo de elaboracion')) return 'Autorización de método de elaboración';\n  if (t.includes('nueva presentacion')) return 'Autorización de nueva presentación';\n  if (t.includes('prospecto') || t.includes('rotulo')) return 'Modificación de prospecto/rótulo';\n  if (t.includes('nueva indicacion') || t.includes('indicacion terapeutica')) return 'Nueva indicación terapéutica';\n  if (t.includes('especificaci') && (t.includes('cambio') || t.includes('modificaci'))) return 'Cambio en especificaciones';\n  if (t.includes('registro inicial') || t.includes('solicitud de registro')) return 'Registro inicial';\n  if (t.includes('fabricante') && t.includes('cambio')) return 'Cambio de fabricante';\n  if (t.includes('variacion menor')) return 'Variación menor';\n  return 'Modificación post-registro';\n}\n\n// ── EJECUCIÓN DE VALIDACIONES ──\nconst docsFaltantes = verificarDocumentos(agregado.data || []);\nconst docsInvalidos = hayDocumentosInvalidos(agregado.data || []);\nconst motivoExtraido = extraerMotivo(agregado.data || []);\nconst empresaExtraida = extraerEmpresa(agregado.data || []);\nconst productoExtraido = extraerProducto(agregado.data || []);\nconst coherencia = verificarCoherencia(agregado.data || []);\n\nconst motivoClasificado = clasificarTramite(motivoExtraido);\nconst motivoFinal = motivoExtraido || motivoClasificado || 'Modificación post-registro';\n\nconst producto = productoExtraido || 'NO IDENTIFICADO';\nconst empresa = empresaExtraida || 'NO IDENTIFICADO';\n\n// ── DECISIÓN FINAL ──\nconst hayDocsFaltantes = docsFaltantes.length > 0;\nconst hayDocsInvalidos = docsInvalidos.length > 0;\nconst hayIncoherencia = !coherencia.coherente;\nconst esObjecion = hayDocsFaltantes || hayDocsInvalidos || hayIncoherencia;\n\nlet detalle = '';\nif (hayDocsFaltantes) {\n  detalle = `Documentos obligatorios faltantes: ${docsFaltantes.join('; ')}.`;\n} else if (hayDocsInvalidos) {\n  detalle = `Se detectaron ${docsInvalidos.length} documento(s) no reconocido(s) como parte de la documentación regulatoria. Verifique que todos los archivos sean documentos válidos del expediente.`;\n} else if (hayIncoherencia) {\n  detalle = `Incoherencia entre documentos. Productos encontrados: ${coherencia.productos.join(', ')}. Empresas encontradas: ${coherencia.empresas.join(', ')}.`;\n}\n\nreturn [{\n  json: {\n    resultado: esObjecion ? 'OBJECION' : 'VALIDACION',\n    nombreArchivo: esObjecion ? `informe_objecion_${timestamp}.docx` : `informe_validacion_${timestamp}.docx`,\n    plantillaKey: esObjecion ? 'objecion' : 'aceptable',\n    DIA: pad(ahora_art.getUTCDate()),\n    MES: meses[ahora_art.getUTCMonth()],\n    TIMESTAMP: timestampLegible,\n    EXPEDIENTE: expedienteForm || 'PENDIENTE DE CARGA EN FORMULARIO',\n    MOTIVO: motivoFinal,\n    PRODUCTO: producto,\n    EMPRESA: empresa,\n    DETALLE: detalle,\n    respuestaIA: respuesta\n  }\n}];\n"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -1184,
+    240
+   ],
+   "id": "92856c95-4c16-4758-abe3-32b2d07ddec9",
+   "name": "Procesar resultado + ALCOA timestamp"
+  },
+  {
+   "parameters": {
+    "httpMethod": "POST",
+    "path": "validacion-ctd",
+    "authentication": "basicAuth",
+    "responseMode": "responseNode",
+    "options": {}
+   },
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2.1,
+   "position": [
+    -3072,
+    240
+   ],
+   "id": "4deef45a-d830-462a-a218-b8c80319a4b2",
+   "name": "Generación Formulario"
+  },
+  {
+   "parameters": {
+    "respondWith": "binary",
+    "options": {
+     "responseHeaders": {
+      "entries": [
+       {
+        "name": "Content-Disposition",
+        "value": "={{ 'attachment; filename=\"' + $json.nombreArchivo + '\"' }}"
+       }
+      ]
+     }
+    }
+   },
+   "type": "n8n-nodes-base.respondToWebhook",
+   "typeVersion": 1.1,
+   "position": [
+    0,
+    0
+   ],
+   "id": "6dfcd232-3c92-495b-a954-537a00613e51",
+   "name": "Descargar informe"
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "={{ 'https://docs.googleapis.com/v1/documents/' + $json.docId + ':batchUpdate' }}",
+    "authentication": "predefinedCredentialType",
+    "nodeCredentialType": "googleDocsOAuth2Api",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ $json.body }}",
+    "options": {}
+   },
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.4,
+   "position": [
+    -576,
+    32
+   ],
+   "id": "4a7e4f10-349c-4acd-af34-a157d23723c6",
+   "name": "Reemplazar texto"
+  },
+  {
+   "parameters": {
+    "operation": "download",
+    "fileId": {
+     "__rl": true,
+     "value": "={{ $json.docId }}",
+     "mode": "id"
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.googleDrive",
+   "typeVersion": 3,
+   "position": [
+    -192,
+    16
+   ],
+   "id": "ece6e36a-51b3-4b40-b8c8-4aa4a8ae8475",
+   "name": "Download file"
+  },
+  {
+   "parameters": {
+    "operation": "copy",
+    "fileId": {
+     "__rl": true,
+     "value": "={{ $json.plantillaKey === 'aceptable' ? '1NahKNrRJtGK_ds_ZvaFmtJ6oV6HkFLWHxwIrMKT873s' : '16JrPXa7EVeZwgQKL-uGI0Wyf94aKqPrqCrWHG7JD-14' }}",
+     "mode": "id"
+    },
+    "name": "={{ $json.nombreArchivo }}",
+    "options": {}
+   },
+   "type": "n8n-nodes-base.googleDrive",
+   "typeVersion": 3,
+   "position": [
+    -1008,
+    304
+   ],
+   "id": "4107da95-36aa-4be4-84a1-e5df0b186e8b",
+   "name": "Copiar plantilla Google Docs"
+  },
+  {
+   "parameters": {
+    "jsCode": "const datos = $('Procesar resultado + ALCOA timestamp').first().json;\nconst docId = $json.id;\n\nconst requests = [\n  { replaceAllText: { containsText: { text: '{{DIA}}', matchCase: true }, replaceText: datos.DIA || '' }},\n  { replaceAllText: { containsText: { text: '{{MES}}', matchCase: true }, replaceText: datos.MES || '' }},\n  { replaceAllText: { containsText: { text: '{{TIMESTAMP}}', matchCase: true }, replaceText: datos.TIMESTAMP || '' }},\n  { replaceAllText: { containsText: { text: '{{EXPEDIENTE}}', matchCase: true }, replaceText: datos.EXPEDIENTE || '' }},\n  { replaceAllText: { containsText: { text: '{{MOTIVO}}', matchCase: true }, replaceText: datos.MOTIVO || '' }},\n  { replaceAllText: { containsText: { text: '{{PRODUCTO}}', matchCase: true }, replaceText: datos.PRODUCTO || '' }},\n  { replaceAllText: { containsText: { text: '{{EMPRESA}}', matchCase: true }, replaceText: datos.EMPRESA || '' }},\n  { replaceAllText: { containsText: { text: '{{RESPONSABLE}}', matchCase: true }, replaceText: 'Lic. Juan Pablo Ñañez' }},\n{ replaceAllText: { containsText: { text: '{{EVALUADORES}}', matchCase: true }, replaceText: '' }},\n  { replaceAllText: { containsText: { text: '{{DETALLE_OBJECION}}', matchCase: true }, replaceText: datos.DETALLE || '' }}\n];\n\nreturn [{\n  json: {\n    docId: docId,\n    body: { requests: requests },\n    nombreArchivo: datos.nombreArchivo\n  }\n}];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -800,
+    304
+   ],
+   "id": "740ee4da-11bc-4bc8-963e-f9079f782534",
+   "name": "Code in JavaScript2"
+  },
+  {
+   "parameters": {
+    "jsCode": "const docId = $json.docId;\nconst datos = $('Procesar resultado + ALCOA timestamp').first().json;\n\nconst requests = [\n  { replaceAllText: { containsText: { text: '{{DIA}}', matchCase: true }, replaceText: datos.DIA || '' }},\n  { replaceAllText: { containsText: { text: '{{MES}}', matchCase: true }, replaceText: datos.MES || '' }},\n  { replaceAllText: { containsText: { text: '{{TIMESTAMP}}', matchCase: true }, replaceText: datos.TIMESTAMP || '' }},\n  { replaceAllText: { containsText: { text: '{{EXPEDIENTE}}', matchCase: true }, replaceText: datos.EXPEDIENTE || '' }},\n  { replaceAllText: { containsText: { text: '{{MOTIVO}}', matchCase: true }, replaceText: datos.MOTIVO || '' }},\n  { replaceAllText: { containsText: { text: '{{PRODUCTO}}', matchCase: true }, replaceText: datos.PRODUCTO || '' }},\n  { replaceAllText: { containsText: { text: '{{EMPRESA}}', matchCase: true }, replaceText: datos.EMPRESA || '' }},\n  { replaceAllText: { containsText: { text: '{{RESPONSABLE}}', matchCase: true }, replaceText: 'Lic. Juan Pablo Ñañez' }},\n{ replaceAllText: { containsText: { text: '{{EVALUADORES}}', matchCase: true }, replaceText: '' }},\n  { replaceAllText: { containsText: { text: '{{DETALLE_OBJECION}}', matchCase: true }, replaceText: datos.DETALLE || '' }}\n];\n\nreturn [{\n  json: {\n    docId: docId,\n    body: { requests: requests },\n    nombreArchivo: datos.nombreArchivo\n  }\n}];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -592,
+    304
+   ],
+   "id": "d1cbb7e2-ef0a-4327-b35e-88ce69c3cd0e",
+   "name": "Code in JavaScript3"
+  },
+  {
+   "parameters": {
+    "jsCode": "const docId = $('Code in JavaScript3').first().json.docId;\nconst nombreArchivo = $('Code in JavaScript3').first().json.nombreArchivo;\n\nreturn [{\n  json: {\n    docId: docId,\n    nombreArchivo: nombreArchivo\n  }\n}];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    288,
+    16
+   ],
+   "id": "2c3c8fda-b394-4d96-bab5-b684061aca29",
+   "name": "Recuperar docId"
+  },
+  {
+   "parameters": {
+    "jsCode": "const item = $input.first();\nconst filename = (item.json.filename || '').toLowerCase();\n\nconst extensionesPermitidas = ['.pdf', '.jpg', '.jpeg', '.png', '.tiff', '.tif'];\nconst esValido = extensionesPermitidas.some(ext => filename.endsWith(ext));\n\nif (!esValido) {\n  const extension = filename.includes('.')\n    ? filename.split('.').pop().toUpperCase()\n    : 'desconocido';\n\n  // Marcamos el item como inválido pero lo dejamos pasar\n  // para que el pipeline llegue hasta respondToWebhook\n  return [{\n    json: {\n      ...item.json,\n      archivoInvalido: true,\n      mensajeError: `El archivo \"${item.json.filename}\" tiene formato .${extension} que no es compatible. Por favor convertilo a PDF antes de enviarlo.`\n    },\n    binary: item.binary\n  }];\n}\n\nreturn [{ json: { ...item.json, archivoInvalido: false }, binary: item.binary }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -2448,
+    304
+   ],
+   "id": "02edaf2f-c66b-4760-9398-c3b6b08c29ae",
+   "name": "Code in JavaScript"
+  },
+  {
+   "id": "fc2f6235-ff8d-465d-b6df-1305a4b240a7",
+   "name": "Pedido Gemini Validador",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -1624,
+    80
+   ],
+   "parameters": {
+    "jsCode": "// Arma el pedido del validador para el sub-workflow \"Gemini con rotación de claves (Hark)\" (kYDhcme8j6T8BZ7O).\n// Prompt idéntico al del nodo HTTP anterior (gemini-2.5-flash). Clave C (Iname) primero; A/B de respaldo.\n// Sin maxOutputTokens: Gemini 3.x usa su máximo por defecto, no se corta.\nconst body = {\n  contents: [\n    {\n      parts: [\n        {\n          text: \"Eres un evaluador regulatorio de ANMAT/INAME especializado en modificaciones post-registro de productos biológicos. Analiza el siguiente conjunto de documentos presentados por un laboratorio y evalúa si la solicitud cumple los requisitos formales MÍNIMOS.\\\\n\\\\nDOCUMENTOS RECIBIDOS:\\\\n\" + $('Obtener todos los textos').first().json.data.map(d => d.text).join('\\\\n\\\\n---\\\\n\\\\n') + \"\\\\n\\\\nRealiza tu evaluación siguiendo EXACTAMENTE estos 4 pasos:\\\\n\\\\nPASO 1: Identificación del expediente y producto\\\\nExtrae los siguientes datos ÚNICAMENTE del campo Laboratorio: de la Declaración Jurada (NO de la Ficha de Modificaciones). Formatea así exactamente:\\\\n- EXPEDIENTE: [valor o NO IDENTIFICADO]\\\\n- PRODUCTO: [nombre comercial o NO IDENTIFICADO]\\\\n- EMPRESA: [valor literal del campo Laboratorio: sin texto adicional, solo el nombre hasta el tipo societario S.A./S.R.L./B.V. inclusive]\\\\n- IFA: [valor o NO IDENTIFICADO]\\\\n\\\\nPASO 2: Verificación de motivo y tipo de trámite\\\\nIndica cuál es el motivo de la modificación solicitada y a qué tipo de trámite corresponde.\\\\n\\\\nPASO 3: Verificación de documentos mínimos obligatorios\\\\nResponde con SI o NO a cada uno de los siguientes puntos:\\\\n- ¿Se recibió al menos una Nota de Presentación o documento similar? SI/NO\\\\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente? SI/NO\\\\n- ¿Se recibió documentación de validación del método analítico (ICH Q2)? SI/NO\\\\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos? SI/NO\\\\nIMPORTANTE: El número de expediente ANMAT y el número de registro del producto son campos DISTINTOS, no los compares entre sí.\\\\nIMPORTANTE: NO evalúes si faltan módulos CTD adicionales. Solo evalúa los 3 documentos mínimos listados.\\\\n\\\\nPASO 4: Recomendación final\\\\nSi TODOS los puntos del PASO 3 son SI, recomienda VALIDAR. Si alguno es NO, recomienda OBJETAR.\\\\n\\\\nCONCLUSIÓN:\\\\nResume en un párrafo breve (máximo 3 líneas) el resultado de tu evaluación.\"\n        }\n      ]\n    }\n  ]\n};\nreturn [{ json: { body, gemini: { check: 'text', prefer_key: 'C', purpose: 'ctd-validador' } } }];\n"
+   }
+  },
+  {
+   "id": "b268cf21-6bd5-4a23-8ca3-b9acae0d92da",
+   "name": "Gemini Validador",
+   "type": "n8n-nodes-base.executeWorkflow",
+   "typeVersion": 1.2,
+   "position": [
+    -1424,
+    240
+   ],
+   "parameters": {
+    "workflowId": {
+     "__rl": true,
+     "value": "kYDhcme8j6T8BZ7O",
+     "mode": "id"
+    },
+    "mode": "each",
+    "workflowInputs": {
+     "mappingMode": "defineBelow",
+     "value": {},
+     "matchingColumns": [],
+     "schema": [],
+     "attemptToConvertTypes": false,
+     "convertFieldsToString": true
+    },
+    "options": {
+     "waitForSubWorkflow": true
+    }
+   },
+   "onError": "continueRegularOutput",
+   "notes": "Sub-workflow Gemini con rotación (clave C Iname primero). Antes: HTTP gemini-2.5-flash."
+  },
+  {
+   "id": "0bef4f28-a10e-4e9a-b5e5-773484494c49",
+   "name": "Pedido Gemini OCR",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -2376,
+    224
+   ],
+   "parameters": {
+    "jsCode": "// Arma el pedido de OCR para el sub-workflow \"Gemini con rotación de claves (Hark)\" (kYDhcme8j6T8BZ7O).\n// Antes el nodo HTTP mandaba el cuerpo vacío (sin la imagen). Ahora va la imagen inline + instrucción de transcripción.\n// Clave C (Iname) primero; A/B de respaldo. Gemini acepta PNG/JPEG/WEBP/HEIC (no TIFF/BMP).\nconst out = [];\nfor (let i = 0; i < $input.all().length; i++) {\n  const it = $input.all()[i];\n  const bin = (it.binary || {}).data || {};\n  const buf = await this.helpers.getBinaryDataBuffer(i, 'data');\n  let mime = bin.mimeType || 'image/jpeg';\n  if (mime === 'image/jpg') mime = 'image/jpeg';\n  out.push({ json: {\n    body: { contents: [{ role: 'user', parts: [\n      { text: 'Transcribí textualmente TODO el texto visible de este documento escaneado, en su idioma original, respetando el orden, tablas y saltos de línea. Devolvé solo el texto transcripto, sin comentarios ni resumen.' },\n      { inline_data: { mime_type: mime, data: buf.toString('base64') } },\n    ] }] },\n    gemini: { check: 'text', prefer_key: 'C', purpose: 'ctd-ocr' },\n    fileName: it.json.fileName || it.json.filename || '',\n  } });\n}\nreturn out;\n"
+   }
+  },
+  {
+   "id": "be691a7a-ced0-4eff-bd54-cfb32ed9e082",
+   "name": "Gemini Vision OCR",
+   "type": "n8n-nodes-base.executeWorkflow",
+   "typeVersion": 1.2,
+   "position": [
+    -2176,
+    384
+   ],
+   "parameters": {
+    "workflowId": {
+     "__rl": true,
+     "value": "kYDhcme8j6T8BZ7O",
+     "mode": "id"
+    },
+    "mode": "each",
+    "workflowInputs": {
+     "mappingMode": "defineBelow",
+     "value": {},
+     "matchingColumns": [],
+     "schema": [],
+     "attemptToConvertTypes": false,
+     "convertFieldsToString": true
+    },
+    "options": {
+     "waitForSubWorkflow": true
+    }
+   }
+  }
+ ],
+ "connections": {
+  "Split archivos": {
+   "main": [
+    [
+     {
+      "node": "Loop Over Items",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Loop Over Items": {
+   "main": [
+    [
+     {
+      "node": "Obtener todos los textos",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Code in JavaScript",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Detectar tipo archivo": {
+   "main": [
+    [
+     {
+      "node": "¿Necesita OCR?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "¿Necesita OCR?": {
+   "main": [
+    [
+     {
+      "node": "Pedido Gemini OCR",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Extract from File",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Gemini Vision OCR": {
+   "main": [
+    [
+     {
+      "node": "Merge",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Extract from File": {
+   "main": [
+    [
+     {
+      "node": "Merge",
+      "type": "main",
+      "index": 1
+     }
+    ]
+   ]
+  },
+  "Merge": {
+   "main": [
+    [
+     {
+      "node": "Normalizar texto",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Normalizar texto": {
+   "main": [
+    [
+     {
+      "node": "Loop Over Items",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Obtener todos los textos": {
+   "main": [
+    [
+     {
+      "node": "Pedido Gemini Validador",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Gemini Validador": {
+   "main": [
+    [
+     {
+      "node": "Procesar resultado + ALCOA timestamp",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Procesar resultado + ALCOA timestamp": {
+   "main": [
+    [
+     {
+      "node": "Copiar plantilla Google Docs",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Generación Formulario": {
+   "main": [
+    [
+     {
+      "node": "Split archivos",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Reemplazar texto": {
+   "main": [
+    [
+     {
+      "node": "Recuperar docId",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Copiar plantilla Google Docs": {
+   "main": [
+    [
+     {
+      "node": "Code in JavaScript2",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Download file": {
+   "main": [
+    [
+     {
+      "node": "Descargar informe",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Code in JavaScript2": {
+   "main": [
+    [
+     {
+      "node": "Code in JavaScript3",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Code in JavaScript3": {
+   "main": [
+    [
+     {
+      "node": "Reemplazar texto",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Recuperar docId": {
+   "main": [
+    [
+     {
+      "node": "Download file",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Code in JavaScript": {
+   "main": [
+    [
+     {
+      "node": "Detectar tipo archivo",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Pedido Gemini Validador": {
+   "main": [
+    [
+     {
+      "node": "Gemini Validador",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Pedido Gemini OCR": {
+   "main": [
+    [
+     {
+      "node": "Gemini Vision OCR",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1",
+  "binaryMode": "separate",
+  "availableInMCP": false,
+  "callerPolicy": "workflowsFromSameOwner"
+ }
+}
