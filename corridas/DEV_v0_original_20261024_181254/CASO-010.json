@@ -1,0 +1,15 @@
+{
+ "resultado": "OBJECION",
+ "nombreArchivo": "informe_objecion_20261024_151328.docx",
+ "plantillaKey": "objecion",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:13:28 (ART UTC-3)",
+ "EXPEDIENTE": "PENDIENTE DE CARGA EN FORMULARIO",
+ "MOTIVO": "Modificación post-registro",
+ "PRODUCTO": "NO IDENTIFICADO",
+ "EMPRESA": "NO IDENTIFICADO",
+ "DETALLE": "Documentos obligatorios faltantes: Nota de Presentación (Módulo 1.0); Formulario de Solicitud (Módulo 1.2); Declaración Jurada (Documento declarado por el regulado).",
+ "respuestaIA": "PASO 1: Identificación del expediente y producto\n- EXPEDIENTE: 1-0047-2002-183280-25-8\n- PRODUCTO: BEVASUR 100 mg/4 mL\n- EMPRESA: Inmunogen Pampa S.A.\n- IFA: Bevacizumab\n\nPASO 2: Verificación de motivo y tipo de trámite\nEl motivo de la modificación solicitada es el cambio en el método analítico de identidad del IFA Bevacizumab, incorporando mapeo peptídico por LC-MS en reemplazo del isoelectroenfoque. Corresponde a un trámite de Modificación Post-Registro (Modalidad: Notificación de cambio en método analítico) para un producto biológico.\n\nPASO 3: Verificación de documentos mínimos obligatorios\n- ¿Se recibió al menos una Nota de Presentación o documento similar? SI\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente? SI\n- ¿Se recibió documentación de validación del método analítico (ICH Q2)? SI\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos? SI\n\nPASO 4: Recomendación final\nRecomiendo VALIDAR.\n\nCONCLUSIÓN:\nLa solicitud cumple con todos los requisitos formales mínimos exigidos, presentando la documentación respaldatoria correspondiente, por lo que se recomienda avanzar con la tramitación de la modificación post-registro.",
+ "_segundos": 3.1
+}
