@@ -1,0 +1,15 @@
+{
+ "resultado": "OBJECION",
+ "nombreArchivo": "informe_objecion_20261024_151743.docx",
+ "plantillaKey": "objecion",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:17:43 (ART UTC-3)",
+ "EXPEDIENTE": "1-0047-2002-603572-24-3",
+ "MOTIVO": "Cambio en el método analítico para la determinación de proteínas de célula huésped en el IFA Bevacizumab, pasando de ELISA comercial a ELISA específico de proceso.",
+ "PRODUCTO": "BEVASUR 100 mg/4 mL",
+ "EMPRESA": "Biofarma Austral S.A.",
+ "DETALLE": "Sin datos regulatorios en: alcance del Documento declarado por el regulado.",
+ "respuestaIA": "Como evaluador regulatorio de ANMAT/INAME especializado en modificaciones post-registro de productos biológicos, presento la evaluación de los documentos presentados:\n\nPASO 1: Identificación del expediente y producto\n- EXPEDIENTE: 1-0047-2002-603572-24-3\n- PRODUCTO: BEVASUR 100 mg/4 mL\n- EMPRESA: Biofarma Austral S.A.\n- IFA: Bevacizumab\n\nPASO 2: Verificación de motivo y tipo de trámite\n- Motivo de la modificación: Cambio en el método analítico para la determinación de proteínas de célula huésped en el IFA Bevacizumab, pasando de ELISA comercial a ELISA específico de proceso, conforme a la normativa ICH Q2(R1).\n- Tipo de trámite: Modificación post-registro (Notificación de cambio en método analítico).\n\nPASO 3: Verificación de documentos mínimos obligatorios\n- ¿Se recibió al menos una Nota de Presentación o documento similar?: NO (La sección 1 del documento titulado \"Documento declarado por el regulado\" contiene texto ajeno e impropio de índole poética/literaria en lugar de la información técnica del alcance).\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente?: SI\n- ¿Se recibió el Documento declarado por el regulado (validación del método analítico, CTD 3.2.S.4.3)?: SI\n- ¿El motivo de la Nota, la descripción del cambio del Formulario y el alcance del Documento declarado contienen información regulatoria real (no textos ajenos como poemas, canciones o recetas)?: NO\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos?: SI\n\nPASO 4: Recomendación final\nOBJETAR\n\nCONCLUSIÓN:\nLa solicitud no cumple con los requisitos formales mínimos debido a la inclusión de texto no regulatorio (poesía) en la sección de alcance del documento de validación, por lo que debe emitirse un emplazamiento para su corrección formal antes de continuar con la evaluación técnica.",
+ "_segundos": 12.3
+}
