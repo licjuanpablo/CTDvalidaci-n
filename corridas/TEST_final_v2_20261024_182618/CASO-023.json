@@ -1,0 +1,15 @@
+{
+ "resultado": "OBJECION",
+ "nombreArchivo": "informe_objecion_20261024_152839.docx",
+ "plantillaKey": "objecion",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:28:39 (ART UTC-3)",
+ "EXPEDIENTE": "1-0047-2002-453710-26-9",
+ "MOTIVO": "Cambio en el método analítico para la determinación de potencia biológica del IFA Trastuzumab, pasando del bioensayo celular al método de citometría de flujo validado según ICH Q2(R1).",
+ "PRODUCTO": "RITUXAN-AR 500 mg",
+ "EMPRESA": "Proteica Rioplatense S.A.",
+ "DETALLE": "El producto no coincide entre documentos: TRASTUFIC 150 mg / RITUXAN-AR 500 mg.",
+ "respuestaIA": "**PASO 1: Identificación del expediente y producto**\n- EXPEDIENTE: 1-0047-2002-453710-26-9\n- PRODUCTO: TRASTUFIC 150 mg\n- EMPRESA: Proteica Rioplatense S.A.\n- IFA: Trastuzumab\n\n**PASO 2: Verificación de motivo y tipo de trámite**\n- Motivo de la modificación solicitada: Cambio en el método analítico para la determinación de potencia biológica del IFA Trastuzumab, pasando del bioensayo celular al método de citometría de flujo validado según ICH Q2(R1).\n- Tipo de trámite: Modificación post-registro (Notificación de cambio en método analítico).\n\n**PASO 3: Verificación de documentos mínimos obligatorios**\n- ¿Se recibió al menos una Nota de Presentación o documento similar? SI\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente? SI\n- ¿Se recibió el Documento declarado por el regulado (validación del método analítico, CTD 3.2.S.4.3)? SI\n- ¿El motivo de la Nota, la descripción del cambio del Formulario y el alcance del Documento declarado contienen información regulatoria real (no textos ajenos como poemas, canciones o recetas)? SI\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos? NO\n\n**PASO 4: Recomendación final**\n- Recomendación: OBJETAR\n\n**CONCLUSIÓN:**\nLa solicitud debe ser objetada debido a una incoherencia crítica en los datos básicos entre los documentos presentados: la Nota de Presentación indica como nombre comercial \"TRASTUFIC 150 mg\", mientras que el Formulario de Solicitud consigna \"RITUXAN-AR 500 mg\", impidiendo la validación formal del trámite.",
+ "_segundos": 4.4
+}
