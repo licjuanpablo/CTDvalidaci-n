@@ -1,0 +1,15 @@
+{
+ "resultado": "OBJECION",
+ "nombreArchivo": "informe_objecion_20261024_151331.docx",
+ "plantillaKey": "objecion",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:13:31 (ART UTC-3)",
+ "EXPEDIENTE": "PENDIENTE DE CARGA EN FORMULARIO",
+ "MOTIVO": "Modificación post-registro",
+ "PRODUCTO": "NO IDENTIFICADO",
+ "EMPRESA": "NO IDENTIFICADO",
+ "DETALLE": "Documentos obligatorios faltantes: Nota de Presentación (Módulo 1.0); Formulario de Solicitud (Módulo 1.2); Declaración Jurada (Documento declarado por el regulado).",
+ "respuestaIA": "**PASO 1: Identificación del expediente y producto**\n- EXPEDIENTE: NO IDENTIFICADO\n- PRODUCTO: FILGRAPAMP 300 mcg\n- EMPRESA: BIOFARMA AUSTRAL S.A.\n- IFA: Filgrastim\n\n**PASO 2: Verificación de motivo y tipo de trámite**\n- Motivo de la modificación: Validación del método analítico para la determinación de potencia biológica del IFA Filgrastim.\n- Tipo de trámite: Modificación post-registro (Validación de método analítico / Control de Calidad).\n\n**PASO 3: Verificación de documentos mínimos obligatorios**\n- ¿Se recibió al menos una Nota de Presentación o documento similar? NO\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente? NO\n- ¿Se recibió documentación de validación del método analítico (ICH Q2)? SI\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos? SI\n\n**PASO 4: Recomendación final**\n- OBJETAR\n\n**CONCLUSIÓN:**\nSe recomienda objetar el trámite debido a la ausencia de documentos administrativos esenciales (Nota de Presentación y Formulario de Solicitud con datos del expediente), a pesar de que el informe técnico de validación analítica cumple con los requisitos correspondientes.",
+ "_segundos": 3.4
+}
