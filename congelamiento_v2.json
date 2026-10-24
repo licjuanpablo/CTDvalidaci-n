@@ -1,0 +1,24 @@
+{
+ "congelado": "2026-10-24T18:26:12+00:00",
+ "flujo_original": {
+  "id": "yPAMaN7qsr2Ud6Op",
+  "updatedAt": "2026-10-24T18:15:25.518Z",
+  "sha256": "9b9930ba2782ff647af703aef180f58640c2eab5fc1532f3ed0f32f1f83f9126"
+ },
+ "flujo_prueba": {
+  "id": "I9Vl0tJqJJgukDXd",
+  "updatedAt": "2026-10-24T18:15:32.206Z",
+  "sha256": "195d8472751b0d4453a3f6d4d7b6c7f9788ab40e7e5c1990807589a97c44c8fc",
+  "nota": "copia del original v2 con salida JSON en lugar de Google Docs"
+ },
+ "subflujo_gemini": {
+  "id": "kYDhcme8j6T8BZ7O",
+  "updatedAt": "2026-10-24T04:44:10.562Z",
+  "sha256": "1806fe5268b477cec25388d65b0fd4660f9487aae2b107aaf9fe19a3ccf6552d",
+  "modelo": "gemini-3.6-flash (cadena de respaldo definida en el nodo Config modelos)"
+ },
+ "reglas_v2_sha256": "10c7efc58f6a61e7843f5dfcf2911ceb256ea545b9cc02bde15d63a71df368e4",
+ "ground_truth_sha256": "a1d5957d4d61995fdad7ae2c1b9b302f94c197f80e3e208fa8067187b9b736c1",
+ "criterios_aceptacion": "Definidos antes de correr TEST: sensibilidad y especificidad del veredicto final >= 90 % (estimación puntual), informadas con IC 95 % de Clopper-Pearson; todos los errores se reportan caso por caso. TEST se ejecuta una sola vez; no se modifica el sistema después.",
+ "resultado_DEV": "DEV_v2_20261024_181731: 19/19 veredicto"
+}
