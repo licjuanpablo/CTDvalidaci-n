@@ -1,0 +1,15 @@
+{
+ "resultado": "OBJECION",
+ "nombreArchivo": "informe_objecion_20261024_151325.docx",
+ "plantillaKey": "objecion",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:13:25 (ART UTC-3)",
+ "EXPEDIENTE": "PENDIENTE DE CARGA EN FORMULARIO",
+ "MOTIVO": "Modificación post-registro",
+ "PRODUCTO": "NO IDENTIFICADO",
+ "EMPRESA": "NO IDENTIFICADO",
+ "DETALLE": "Documentos obligatorios faltantes: Nota de Presentación (Módulo 1.0); Formulario de Solicitud (Módulo 1.2); Declaración Jurada (Documento declarado por el regulado).",
+ "respuestaIA": "**PASO 1: Identificación del expediente y producto**\n- EXPEDIENTE: 1-0047-2002-711557-26-2\n- PRODUCTO: SOMATRAL 5 mg\n- EMPRESA: Celltech Litoral S.R.L.\n- IFA: Somatropina\n\n**PASO 2: Verificación de motivo y tipo de trámite**\nEl motivo de la modificación solicitada es el cambio en el método analítico para la determinación de pureza del IFA Somatropina, reemplazando la electroforesis SDS-PAGE por cromatografía de exclusión molecular (SEC-HPLC). El trámite corresponde a una Modificación Post-Registro de producto biológico (modalidad: notificación de cambio en método analítico).\n\n**PASO 3: Verificación de documentos mínimos obligatorios**\n- ¿Se recibió al menos una Nota de Presentación o documento similar? SI\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente? SI\n- ¿Se recibió documentación de validación del método analítico (ICH Q2)? SI\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos? SI\n\n**PASO 4: Recomendación final**\nRecomiendo VALIDAR.\n\n**CONCLUSIÓN:**\nLa solicitud presentada por Celltech Litoral S.R.L. cumple satisfactoriamente con los requisitos formales mínimos y la documentación obligatoria exigida para el trámite de modificación post-registro del producto biológico Somatral 5 mg, por lo que procede su pase a evaluación técnica.",
+ "_segundos": 3.8
+}
