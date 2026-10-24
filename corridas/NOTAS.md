@@ -1,0 +1,6 @@
+# Corridas
+
+- `DEV_v0_original_20261024_181254`: flujo original (v1) sobre DEV. Línea de base. CASO-001 a CASO-017 corrieron con v1; CASO-018 y CASO-019 fallaron porque el webhook se reemplazó durante la corrida, y CASO-024 y CASO-033 ya corrieron con v2. Usar solo CASO-001 a CASO-017 como línea de base.
+- `DEV_v2_20261024_181731`: flujo ajustado (v2) sobre DEV, 24/10/2026. Veredicto 19/19. Único error de extracción: CASO-033 (empresa inconsistente por diseño; el modelo tomó la empresa de otro documento, el veredicto fue correcto).
+- TEST: pendiente. Se ejecuta una sola vez con la versión congelada.
+- `TEST_final_v2_20261024_182618`: corrida única sobre los 41 casos TEST con la versión congelada (ver `congelamiento_v2.json`), 24/10/2026. Veredicto final: sensibilidad 21/21 (IC 95 % 84–100 %), especificidad 18/20 (68–99 %), exactitud 39/41. Cumple el criterio de aceptación fijado antes (>= 90 %). Los dos errores son objeciones de más en escaneos (CASO-020 ruidoso, CASO-059 escaneado): el OCR leyó con una letra cambiada la empresa o el producto en un documento y la regla de coincidencia objetó. Son fallas conservadoras (el expediente va a revisión humana) y no se corrigieron, para no ajustar el sistema con TEST.
