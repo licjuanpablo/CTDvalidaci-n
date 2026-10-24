@@ -1,0 +1,15 @@
+{
+ "resultado": "OBJECION",
+ "nombreArchivo": "informe_objecion_20261024_153110.docx",
+ "plantillaKey": "objecion",
+ "DIA": "24",
+ "MES": "octubre",
+ "TIMESTAMP": "24/10/2026 15:31:10 (ART UTC-3)",
+ "EXPEDIENTE": "1-0047-2002-362846-26-9",
+ "MOTIVO": "Cambio en el método analítico para la determinación de potencia biológica del IFA Bevacizumab, pasando del bioensayo celular al método de citometría de flujo validado según ICH Q2(R1).",
+ "PRODUCTO": "BEVASUR 100 mg/4 mL",
+ "EMPRESA": "Celltech Litoral S.R.L.",
+ "DETALLE": "El producto no coincide entre documentos: BEVASUR 100 mg/4 mL / SOMATRAL 5 mg.",
+ "respuestaIA": "**PASO 1: Identificación del expediente y producto**\n- EXPEDIENTE: 1-0047-2002-362846-26-9\n- PRODUCTO: BEVASUR 100 mg/4 mL\n- EMPRESA: Celltech Litoral S.R.L.\n- IFA: Bevacizumab\n\n**PASO 2: Verificación de motivo y tipo de trámite**\n- Motivo de la modificación solicitada: Cambio en el método analítico para la determinación de potencia biológica del IFA Bevacizumab, pasando del bioensayo celular al método de citometría de flujo validado según ICH Q2(R1).\n- Tipo de trámite: Modificación Post-Registro (Modalidad: Notificación de cambio en método analítico).\n\n**PASO 3: Verificación de documentos mínimos obligatorios**\n- ¿Se recibió al menos una Nota de Presentación o documento similar? SI\n- ¿Se recibió un Formulario de Solicitud o documento con datos del expediente? SI\n- ¿Se recibió el Documento declarado por el regulado (validación del método analítico, CTD 3.2.S.4.3)? SI\n- ¿El motivo de la Nota, la descripción del cambio del Formulario y el alcance del Documento declarado contienen información regulatoria real (no textos ajenos como poemas, canciones o recetas)? SI\n- ¿Los datos básicos (producto, empresa) son coherentes entre los documentos recibidos? NO *(Nota: Existe una incoherencia en los datos del producto declarados entre el Formulario de Solicitud, donde se consigna el producto \"BEVASUR 100 mg/4 mL\", y el CTD Módulo 3.2.S.4.3 presentado, el cual hace referencia explícita al producto \"SOMATRAL 5 mg\").*\n\n**PASO 4: Recomendación final**\n- OBJETAR\n\n**CONCLUSIÓN:**\nLa solicitud no cumple con los requisitos formales mínimos debido a una incoherencia crítica en la identificación del producto entre el formulario de solicitud (BEVASUR) y el documento de validación técnica aportado (SOMATRAL), por lo que se debe emitir un pliego de objeciones.",
+ "_segundos": 8.8
+}
