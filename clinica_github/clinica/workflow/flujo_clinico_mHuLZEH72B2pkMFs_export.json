@@ -1,0 +1,512 @@
+{
+ "id": "mHuLZEH72B2pkMFs",
+ "name": "IA Validación CTD — Clínica (prueba)",
+ "description": null,
+ "active": true,
+ "createdAt": "2026-10-25T16:25:13.978Z",
+ "updatedAt": "2026-10-25T16:34:13.191Z",
+ "versionCounter": 3,
+ "sourceWorkflowId": null,
+ "nodes": [
+  {
+   "id": "0acf8d7a-5de7-4453-a725-7ba4f520c23b",
+   "name": "Split archivos",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -2864,
+    240
+   ],
+   "parameters": {
+    "jsCode": "const item = $input.first();\nconst binaryKeys = Object.keys(item.binary || {});\nconst b = item.json.body || {};\n// Campos del formulario web: expediente (texto), sin_ia=1 (no llama a Gemini; solo reglas), debug=1 (devuelve textos)\nconst expedienteForm = item.json.expediente || b.expediente || '';\nconst sinIA = String(item.json.sin_ia || b.sin_ia || '') === '1';\nconst debug = String(item.json.debug || b.debug || '') === '1';\nreturn binaryKeys.map(key => ({\n  json: { filename: item.binary[key].fileName, expedienteForm, sinIA, debug },\n  binary: { data: item.binary[key] }\n}));\n"
+   }
+  },
+  {
+   "id": "010a0223-88e8-4438-8468-6df5be234657",
+   "name": "Loop Over Items",
+   "type": "n8n-nodes-base.splitInBatches",
+   "typeVersion": 3,
+   "position": [
+    -2640,
+    240
+   ],
+   "parameters": {
+    "options": {}
+   }
+  },
+  {
+   "id": "69377b31-99a0-4ded-9cb1-d01dbdedd19e",
+   "name": "Detectar tipo archivo",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -2608,
+    496
+   ],
+   "parameters": {
+    "jsCode": "const item = $input.first();\nconst fileName = item.binary?.data?.fileName || '';\nconst mimeType = item.binary?.data?.mimeType || '';\n\nconst esImagen = mimeType.includes('image') || \n                 fileName.match(/\\.(jpg|jpeg|png|tiff|tif|bmp)$/i);\n\nreturn [{\n  json: {\n    ...item.json,\n    necesitaOCR: !!esImagen,\n    fileName,\n    mimeType\n  },\n  binary: item.binary\n}];"
+   }
+  },
+  {
+   "id": "d6d23b27-2307-4ec4-a215-9d26c5957281",
+   "name": "¿Necesita OCR?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.3,
+   "position": [
+    -2400,
+    496
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict",
+      "version": 3
+     },
+     "conditions": [
+      {
+       "id": "09246bdf-4045-4379-84ec-55d6a373f264",
+       "leftValue": "={{ $json.necesitaOCR }}",
+       "rightValue": "",
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {
+     "ignoreCase": false
+    }
+   }
+  },
+  {
+   "id": "0dbd6d43-eb91-4b2f-9d8b-5ddccf465348",
+   "name": "Extract from File",
+   "type": "n8n-nodes-base.extractFromFile",
+   "typeVersion": 1.1,
+   "position": [
+    -2176,
+    608
+   ],
+   "parameters": {
+    "operation": "pdf",
+    "binaryPropertyName": "={{ Object.keys($binary)[0] }}",
+    "options": {}
+   }
+  },
+  {
+   "id": "768c7486-985a-4641-95cd-2e613895a73f",
+   "name": "Merge",
+   "type": "n8n-nodes-base.merge",
+   "typeVersion": 3.2,
+   "position": [
+    -1984,
+    496
+   ],
+   "parameters": {}
+  },
+  {
+   "id": "634bf06b-ef39-41d0-b37f-b388c7b0287a",
+   "name": "Normalizar texto",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -1792,
+    496
+   ],
+   "parameters": {
+    "jsCode": "// Normaliza la salida del extractor (PDF digital) o del OCR de Gemini y conserva el nombre del archivo.\nconst item = $input.first();\nlet fileName = '';\ntry { fileName = $('Code in JavaScript').first().json.filename || ''; } catch (e) {}\nif (item.json.candidates) {\n  const texto = item.json.candidates\n    .map(c => (c.content?.parts || []).filter(p => !p.thought).map(p => p.text || '').join('') || '')\n    .join('\\n\\n');\n  return [{ json: { text: texto, source: 'gemini_ocr', fileName } }];\n}\nif (item.json.text) {\n  return [{ json: { text: item.json.text, source: 'digital', fileName, numpages: item.json.numpages || null } }];\n}\nreturn [{ json: { text: '', source: 'unknown', fileName } }];\n"
+   }
+  },
+  {
+   "id": "cd13ebe0-8d29-4c18-a46c-9d188e182bba",
+   "name": "Obtener todos los textos",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -1616,
+    240
+   ],
+   "parameters": {
+    "jsCode": "const items = $input.all();\nconst data = items.map(item => ({\n  text: item.json.text || '',\n  source: item.json.source || 'unknown',\n  fileName: item.json.fileName || ''\n}));\nreturn [{ json: { data } }];\n"
+   }
+  },
+  {
+   "id": "3f4f33d1-e4bb-4d2f-8f9a-e4bd9fbdec33",
+   "name": "Reglas clínicas + ALCOA timestamp",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -1184,
+    240
+   ],
+   "parameters": {
+    "jsCode": "// ════════════════════════════════════════════════════════════════════════════════════════════\n// Reglas clínicas + ALCOA timestamp — validador FORMAL de trámites CTD (versión CLÍNICA, prueba)\n// Principio: Gemini (nodo anterior) solo extrae/sugiere; ESTAS reglas determinísticas deciden.\n// Salida central: Asignar a (Calidad | Clínica | Ambas) + dictamen formal (Apto para evaluación | Objetar)\n//                 + objeciones (bloqueantes) + observaciones (no bloqueantes) + información.\n// No evalúa el fondo científico. No usa informes de evaluación.\n// ════════════════════════════════════════════════════════════════════════════════════════════\nconst VERSION = 'clinica-v1.3 (2026-10-25)';\nconst raw = $input.first().json || {};\nconst agregado = $('Obtener todos los textos').first().json || { data: [] };\nlet splitItems = [];\ntry { splitItems = $('Split archivos').all(); } catch (e) {}\nconst expedienteForm = splitItems.find(it => it.json?.expedienteForm)?.json?.expedienteForm || '';\nconst debug = splitItems.some(it => it.json?.debug);\nlet archivosRechazados = [];\ntry { archivosRechazados = $('Code in JavaScript').all().filter(it => it.json.archivoInvalido).map(it => it.json.filename); } catch (e) {}\n\n// ── utilidades ──\nconst sinTildes = s => (s || '').normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');\nconst norm = s => sinTildes(s).toLowerCase().replace(/[\\u2013\\u2014]/g, '-').replace(/\\s+/g, ' ').trim();\nconst compacto = s => norm(s).replace(/[^a-z0-9]/g, '');\nconst digitos = s => (s || '').replace(/\\D/g, '');\nconst unico = a => [...new Set(a)];\nconst recorte = (s, n = 160) => { s = (s || '').replace(/\\s+/g, ' ').trim(); return s.length > n ? s.slice(0, n - 1) + '…' : s; };\n\n// ── extracción de Gemini (opcional; solo como respaldo y para informar concordancia) ──\nlet ia = null, iaEstado = 'no disponible';\nif (raw.skipped || raw._gemini?.skip) iaEstado = 'omitida (sin_ia=1)';\nelse {\n  const txt = (raw.candidates?.[0]?.content?.parts || []).filter(p => !p.thought).map(p => p.text || '').join('');\n  try { ia = JSON.parse(txt.replace(/^```(?:json)?\\s*|\\s*```$/g, '')); iaEstado = 'ok'; } catch (e) { iaEstado = txt ? 'respuesta no JSON' : 'sin respuesta'; }\n}\nconst iaDoc = nombre => (ia?.documentos || []).find(d => norm(d.archivo) === norm(nombre));\n\n// ════════════════ 1. CLASIFICACIÓN DE DOCUMENTOS (por contenido; el nombre es secundario) ════════════════\nconst STOP_ES = ['de', 'la', 'el', 'los', 'las', 'que', 'en', 'y', 'para', 'con', 'por', 'del', 'se', 'una', 'un', 'su', 'al', 'es'];\nconst STOP_EN = ['the', 'of', 'and', 'to', 'in', 'is', 'for', 'with', 'be', 'are', 'this', 'that', 'patients', 'should', 'was', 'were', 'by', 'or'];\nfunction idioma(t) {\n  const w = norm(t).split(/[^a-z]+/);\n  const es = w.filter(x => STOP_ES.includes(x)).length, en = w.filter(x => STOP_EN.includes(x)).length;\n  if (es + en < 8) return 'indeterminado';\n  return en > es ? 'en' : 'es';\n}\nfunction tipoDoc(t, nombre) {\n  const h = norm(t.slice(0, 700)), f = norm(t), n = norm(nombre);\n  if (/highlights of prescribing information|full prescribing information/.test(h) || /\\d{6}s\\d{3}lbl/.test(n)) return 'referencia_fda';\n  if (/ficha tecnica o resumen de las caracteristicas del producto|summary of product characteristics|agencia europea de medicamentos|european medicines agency/.test(f.slice(0, 3000)) || /epar/.test(n)) return 'referencia_ema';\n  if (/product monograph|monographie de produit/.test(h)) return 'referencia_otra_agencia';\n  if (/registro de especialidades medicinales|anexo iii certificado|datos de la especialidad medicinal/.test(h)) return 'certificado';\n  if (/nota de presentacion|de nuestra (mayor )?consideracion|concepto del recibo|motivo del tramite/.test(h)) return 'nota';\n  if (/formulario de solicitud|ficha de modificaciones|alcance de la aplicacion|formulario soli/.test(h)) return 'formulario';\n  if (/declaracion jurada/.test(h) && /unicos cambios/.test(f)) return 'ddjj_cambios';\n  if (/declaracion jurada/.test(h) && /no se encuentra impactada|no hay modificaciones|no modifica/.test(f)) return 'ddjj_no_impactada';\n  if (/aspectos clinicos generales|resumen clinico|clinical overview|modulo 2\\.5|module 2\\.5|descripcion general clinica/.test(h)) return 'resumen_clinico';\n  if (/documento declarado por el regulado|3\\.2\\.[ps]\\.\\d/.test(h)) return 'soporte_calidad';\n  if (/informacion para el paciente|lea todo este prospecto|prospecto: informacion para el usuario/.test(h)) return 'info_paciente';\n  if (/rotulo|estuche|etiqueta del/.test(h)) return 'rotulo';\n  if (/prospecto|informacion para el profesional/.test(h) || (/posologia/.test(f) && /contraindicaciones/.test(f))) return 'prospecto';\n  if (/company core data sheet|core data sheet/.test(h)) return 'documento_empresa';\n  return 'otro';\n}\nconst RE_IF = /IF-\\d{4}-\\d{5,}-APN-[A-Z]+#ANMAT/;\nconst RE_GLOBO = /(Comentado|Commented)\\s*\\[[A-Za-z]{1,4}\\d+\\]|^\\s*(Con formato|Formatted):/m;\nconst RE_FECHA_DUP = /revisi[oó]n:?\\s*[a-záéíóú]+\\s*\\d{4}\\s*[a-záéíóú]+\\s*\\d{4}/i;\nfunction rolTexto(t) {\n  const ev = [];\n  if (RE_IF.test(t)) ev.push('sello_IF');\n  if (RE_GLOBO.test(t)) ev.push('globos_comentario');\n  if (/CONTROL DE CAMBIOS/.test(t)) ev.push('encabezado_control_cambios');\n  if (RE_FECHA_DUP.test(t)) ev.push('fechas_duplicadas');\n  const rol = ev.includes('sello_IF') && ev.length === 1 ? 'aprobado' : ev.some(e => e !== 'sello_IF') ? 'control_cambios' : 'proyecto';\n  return { rol, ev };\n}\nfunction rolNombre(nombre) {\n  const n = norm(nombre);\n  if (/aprobad/.test(n)) return 'aprobado';\n  if (/ctrol|control|cambios|working/.test(n)) return 'control_cambios';\n  if (/proyect/.test(n)) return 'proyecto';\n  return null;\n}\nconst ES_TEXTO = { prospecto: 'prospecto', info_paciente: 'ip', rotulo: 'rotulo' };\nconst NOMBRE_TEXTO = { prospecto: 'Prospecto', ip: 'Información para el paciente', rotulo: 'Rótulos' };\n\nconst docs = (agregado.data || []).map((d, i) => {\n  const text = d.text || '', archivo = d.fileName || `documento_${i + 1}`;\n  let tipo = tipoDoc(text, archivo), fuenteTipo = 'reglas';\n  if (tipo === 'otro' && iaDoc(archivo)?.tipo_canonico) { tipo = iaDoc(archivo).tipo_canonico.replace('info_paciente', 'info_paciente'); fuenteTipo = 'IA'; }\n  const doc = { archivo, text, tipo, fuenteTipo, idioma: idioma(text), texto: ES_TEXTO[tipo] || null, hash: compacto(text).slice(0, 4000) };\n  if (doc.texto) { const r = rolTexto(text); doc.rol = r.rol; doc.evidenciaRol = r.ev; doc.rolNombre = rolNombre(archivo); }\n  return doc;\n});\nconst porTipo = t => docs.filter(d => d.tipo === t);\nconst objeciones = [], observaciones = [], informacion = [];\nconst objetar = (codigo, regla, detalle, archivo) => objeciones.push({ codigo, regla, detalle, archivo: archivo || '' });\nconst observar = (codigo, regla, detalle, archivo) => observaciones.push({ codigo, regla, detalle, archivo: archivo || '' });\nconst informar = (codigo, detalle, archivo) => informacion.push({ codigo, detalle, archivo: archivo || '' });\n\nif (archivosRechazados.length) objetar('FORMATO', 'R-FMT', `Archivo(s) en formato no admitido: ${archivosRechazados.join(', ')}. Presentar en PDF.`);\nif (!docs.length) objetar('SIN_DOCUMENTOS', 'R-DOC', 'No se recibieron documentos legibles.');\n\n// ════════════════ 2. CERTIFICADO REM (fuente de verdad) ════════════════\nfunction campo(t, etiquetas) {\n  for (const et of etiquetas) {\n    const m = (t || '').match(new RegExp('(?:^|\\\\n)[ \\\\t•\\\\-]*' + et + '[ \\\\t]*:[ \\\\t]*([^\\\\n]+)', 'i'));\n    if (m && m[1].trim()) return m[1].trim();\n  }\n  return '';\n}\nconst certDoc = porTipo('certificado')[0];\nconst cert = { presente: !!certDoc, fuente: {} };\nif (certDoc) {\n  const t = certDoc.text;\n  cert.nombre = campo(t, ['Nombre comercial']); cert.ifa = campo(t, ['Nombre Gen[ée]rico \\\\(IFA/s\\\\)', 'Nombre/s gen[ée]rico/s', 'Nombre gen[ée]rico', 'IFA']);\n  cert.concentracion = campo(t, ['Concentraci[óo]n(?:/es)?']); cert.forma = campo(t, ['Forma farmac[ée]utica']);\n  cert.titular = campo(t, ['Raz[óo]n Social', 'Titular']);\n  cert.numero = ((t.match(/CERTIFICADO\\s*N[°ºo]\\.?\\s*([\\d\\.\\s]{4,9})/i) || [])[1] || '').trim();\n  cert.vida = campo(t, ['Per[íi]odo de vida [úu]til']); cert.conservacion = campo(t, ['Forma de conservaci[óo]n']);\n  cert.elaborador = campo(t, ['Elaborador del producto terminado', 'Elaborador']);\n  const c2 = ia?.certificado || {};\n  for (const [k, kia] of [['nombre', 'nombre_comercial'], ['ifa', 'ifa'], ['concentracion', 'concentracion'], ['forma', 'forma_farmaceutica'], ['titular', 'titular'], ['numero', 'n_certificado']]) {\n    cert.fuente[k] = cert[k] ? 'reglas' : (c2[kia] ? 'IA' : 'no encontrado');\n    if (!cert[k] && c2[kia]) cert[k] = String(c2[kia]);\n  }\n} else {\n  objetar('FALTA_CERT', 'R-CERT-0', 'No se presentó el Certificado REM del producto (fuente de verdad de nombre comercial, IFA, concentración, forma farmacéutica, titular y N° de certificado).');\n}\n\n// ── normalizadores para la congruencia ──\nconst nNombre = s => compacto((s || '').replace(/[®™]/g, ''));\nconst nIfa = s => compacto(s);\nconst nConc = s => norm(s).replace(/,/g, '.').replace(/\\s+/g, '').replace(/mililitros?/g, 'ml');\nconst SINON = [[/perfusion/g, 'infusion'], [/endovenos[ao]/g, 'intravenosa'], [/inyeccion/g, 'inyectable'], [/liofilizado/g, 'liofilizado']];\nconst nForma = s => { let x = norm(s); for (const [a, b] of SINON) x = x.replace(a, b); return x.replace(/[^a-z]/g, ''); };\nconst nTit = s => norm(s).replace(/\\b(s\\.?\\s?a\\.?\\s?(q\\.?\\s?e?\\s?i\\.?)?|s\\.?\\s?r\\.?\\s?l\\.?|s\\.?\\s?a\\.?\\s?i\\.?\\s?c\\.?)(?=\\s|$|,|\\.)/g, '').replace(/[^a-z0-9]/g, '');\nconst RE_CONC = /\\d+(?:[.,]\\d+)?\\s*(?:mg|mcg|µg|g|ui|u)\\s*\\/\\s*\\d*(?:[.,]\\d+)?\\s*(?:ml|dosis)/gi;\n\n// ════════════════ 3. CONGRUENCIA CON EL CERTIFICADO (nota, formulario, DDJJ y textos propuestos) ════════════════\nconst incong = [];\nfunction cotejar(dato, valorDoc, valorCert, fn, archivo) {\n  if (!valorDoc || !valorCert) return;\n  if (fn(valorDoc) !== fn(valorCert)) incong.push({ dato, archivo, documento: valorDoc, certificado: valorCert });\n}\nif (cert.presente) {\n  for (const d of [...porTipo('nota'), ...porTipo('formulario')]) {\n    const t = d.text;\n    cotejar('nombre comercial', campo(t, ['Nombre comercial', 'Producto']), cert.nombre, nNombre, d.archivo);\n    cotejar('IFA', campo(t, ['IFA(?: \\\\([^)]*\\\\))?', 'Nombre gen[ée]rico(?: \\\\(IFA\\\\))?', 'Principio activo']), cert.ifa, nIfa, d.archivo);\n    cotejar('concentración', campo(t, ['Concentraci[óo]n(?:/es)?']), cert.concentracion, nConc, d.archivo);\n    cotejar('forma farmacéutica', campo(t, ['Forma farmac[ée]utica']), cert.forma, nForma, d.archivo);\n    cotejar('titular', campo(t, ['Titular(?: del (?:registro|certificado))?', 'Raz[óo]n social', 'Solicitante']), cert.titular, nTit, d.archivo);\n    cotejar('N° de certificado', campo(t, ['Certificado N[°ºo]\\\\.?', 'N[°ºo]\\\\.? de certificado']), cert.numero, digitos, d.archivo);\n  }\n  const propios = docs.filter(d => (d.texto && d.rol === 'proyecto') || /^ddjj/.test(d.tipo));\n  for (const d of propios) {\n    const t = d.text, cab = t.slice(0, 450);\n    for (const m of t.matchAll(/Certificado\\s*N[°ºo]\\.?\\s*:?\\s*([\\d][\\d\\.\\s]{3,8}\\d)/gi)) cotejar('N° de certificado', m[1], cert.numero, digitos, d.archivo);\n    if (!d.texto) continue;\n    if (cert.nombre && !nNombre(cab).includes(nNombre(cert.nombre))) {\n      const otro = (cab.match(/^\\s*([A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ0-9\\- ]{2,40})®/m) || [])[1] || '(no figura)';\n      incong.push({ dato: 'nombre comercial', archivo: d.archivo, documento: otro.trim(), certificado: cert.nombre });\n    }\n    if (cert.ifa && !nIfa(cab).includes(nIfa(cert.ifa))) incong.push({ dato: 'IFA', archivo: d.archivo, documento: '(no figura en el encabezado)', certificado: cert.ifa });\n    for (const m of cab.match(RE_CONC) || []) cotejar('concentración', m, cert.concentracion, nConc, d.archivo);\n    if (cert.forma && d.texto !== 'rotulo' && !nForma(cab).includes(nForma(cert.forma))) incong.push({ dato: 'forma farmacéutica', archivo: d.archivo, documento: '(no coincide en el encabezado)', certificado: cert.forma });\n    const tit = (t.match(/Titular:\\s*([^,\\n]+(?:S\\.?\\s?A\\.?|S\\.?\\s?R\\.?\\s?L\\.?)?)/i) || [])[1];\n    if (tit) cotejar('titular', tit, cert.titular, nTit, d.archivo);\n  }\n  for (const x of incong) objetar('INCONGRUENCIA', 'R-CERT-3', `${x.dato}: «${x.documento}» en ${x.archivo} no coincide con el certificado REM («${x.certificado}»).`, x.archivo);\n}\n\n// ════════════════ 4. IDIOMA ════════════════\nfor (const d of docs) {\n  if (d.idioma !== 'en') continue;\n  if (/^referencia_/.test(d.tipo)) continue;   // referencias de agencias (EMA/FDA/otras): se aceptan\n  objetar('IDIOMA', 'R-IDI-1', `El documento «${d.archivo}» (${d.tipo.replace(/_/g, ' ')}) está en idioma no español y no es una referencia de agencia. Se solicita presentarlo en idioma español.`, d.archivo);\n}\nfor (const d of docs.filter(d => /^referencia_/.test(d.tipo))) {\n  informar('REF_AGENCIA', `Se recibió ${d.tipo === 'referencia_fda' ? 'el prospecto/label de FDA' : d.tipo === 'referencia_ema' ? 'la información del producto de EMA (EPAR/SmPC)' : 'una referencia de otra agencia'} (${d.idioma === 'en' ? 'en inglés' : 'en español'}) como referencia; es opcional y no se evalúa.`, d.archivo);\n}\n\n// ════════════════ 5. TABLA DE MODIFICACIONES (referencia del alcance) ════════════════\nconst SEC_TABLA = [\n  ['CONTRAINDICACIONES', /contraindicac/], ['INDICACIONES', /(?<!contra)indicaci|que es .{0,40}para que|para que se utiliza/],\n  ['POSOLOGIA', /posolog|\\bdosis\\b|modo de administracion|forma de administracion|como usar/], ['SOBREDOSIS', /sobredosi/],\n  ['ADVERTENCIAS', /advertencia|precaucion|que necesita saber|antes de usar/], ['INTERACCIONES', /interacci/],\n  ['POBLACIONES', /embarazo|lactancia|fertilidad|poblaciones|pediatr/], ['RAM', /reacciones adversas|efectos adversos|posibles efectos|efectos secundarios|\\bram\\b|poscomercializ/],\n  ['PROPIEDADES', /propiedades|farmacocin|farmacodin|mecanismo de accion|caracteristicas farmacol/], ['ESTUDIOS', /estudios clinicos/],\n  ['COMPOSICION', /formula|composicion|excipiente/], ['CONSERVACION', /conservacion|almacenamiento|vida util|periodo de validez/],\n  ['PRESENTACION', /presentacion|contenido del envase|^contenido\\b/], ['ELABORADOR', /elaborad|fabricante|sitio de fabricacion/],\n  ['ESPECIFICACIONES', /especificacion|metodo analitico/], ['ACCION', /accion terapeutica/]];\nconst CLINICAS = ['INDICACIONES', 'POSOLOGIA', 'CONTRAINDICACIONES', 'ADVERTENCIAS', 'INTERACCIONES', 'POBLACIONES', 'RAM', 'SOBREDOSIS', 'PROPIEDADES', 'ESTUDIOS', 'ACCION'];\nconst CALIDAD = ['COMPOSICION', 'CONSERVACION', 'ELABORADOR', 'ESPECIFICACIONES', 'PRESENTACION'];\nfunction docDeLinea(l, sig) {\n  if (/datos caracteristicos/.test(l)) return 'ficha';\n  if (/paciente/.test(l)) return 'ip';\n  if (/informacion para\\s*$|informacion para (?!el profesional)/.test(l) && /^\\s*(el )?(paciente|usuario)/.test(sig || '')) return 'ip';   // celda partida en dos renglones\n  if (/prospecto|profesional/.test(l)) return 'prospecto';\n  if (/rotulo|estuche|etiqueta/.test(l)) return 'rotulo';\n  return null;\n}\nfunction regionTabla(t, tipo) {\n  const L = t.split('\\n');\n  let i0 = -1, i1 = L.length;\n  const ini = tipo === 'ddjj_cambios' ? /unicos cambios/ : /tabla de modificaciones|ficha de modificaciones|datos afectados|antecedentes y descripcion|autorizado vs propuesto|resumen de los cambios|cuadro comparativo|modificacion solicitada/;\n  for (let i = 0; i < L.length; i++) { if (i0 < 0 && ini.test(norm(L[i]))) { i0 = i; continue; } if (i0 >= 0 && /documentacion soporte|^se declara que los nuevos textos|^firma/.test(norm(L[i]))) { i1 = i; break; } }\n  return i0 < 0 ? [] : L.slice(i0, i1).map(norm);\n}\nfunction parsearTabla() {\n  const filas = [], estadoDoc = {}, fuentes = [];\n  let nuevaInd = false;\n  for (const d of [...porTipo('formulario'), ...porTipo('ddjj_cambios')]) {\n    const L = regionTabla(d.text, d.tipo);\n    if (!L.length) continue;\n    fuentes.push(d.archivo);\n    let ctx = null;\n    for (let i = 0; i < L.length; i++) {\n      const l = L[i];\n      if (/nueva indicacion/.test(l)) nuevaInd = true;\n      const dl = docDeLinea(l, L[i + 1]);\n      const sin = /sin modificacion|no hay modificaciones|\\bn\\/a\\b|no afectad|no se encuentra impactad/.test(l), con = /con modificacion/.test(l);\n      if (dl) { ctx = dl; if (dl !== 'ficha' && (sin || con)) estadoDoc[dl] = sin ? 'sin' : 'con'; }\n      else if (sin && ctx && ctx !== 'ficha' && /datos afectados/.test(l)) estadoDoc[ctx] = 'sin';\n      const limpiar = x => (x || '').replace(/informacion para el (paciente|profesional)|prospecto|rotulos?|datos caracteristicos|aprobado:.*$/g, ' ');\n      const resto = limpiar(l), sig = limpiar(L[i + 1]);\n      // una celda puede partirse en dos renglones (\"Posibles efectos / adversos\"): se acepta el término que EMPIEZA en este renglón\n      const secs = SEC_TABLA.filter(([, re]) => { const m = (resto + ' ' + sig).match(re); return m && m.index < resto.length; }).map(([k]) => k);\n      if (!secs.length) continue;\n      if (sin) continue;   // fila de la ficha marcada SIN MODIFICACIÓN / N/A\n      const docFila = ctx || 'ficha';\n      const contexto = l + ' ' + (L[i + 1] || '') + ' ' + (L[i + 2] || '');\n      for (const s of secs) filas.push({ documento: docFila, seccion: s, estado: 'con', texto: recorte(l, 120), remiteDisposicion: /disposicion|ya aprobad/.test(contexto),\n                                         sinCambioCuantitativo: /sin cambio cuali|efecto conocido/.test(contexto), fuente: 'reglas' });\n    }\n  }\n  for (const f of filas) if (f.documento !== 'ficha' && !estadoDoc[f.documento]) estadoDoc[f.documento] = 'con';\n  return { filas, estadoDoc, fuentes, nuevaInd };\n}\nconst tabla = parsearTabla();\ntabla.origen = 'reglas';\nif (!tabla.filas.length && ia?.tabla_modificaciones?.filas?.length) {   // respaldo: filas extraídas por Gemini\n  const mapDoc = { prospecto: 'prospecto', info_paciente: 'ip', rotulo: 'rotulo', ficha: 'ficha' };\n  for (const f of ia.tabla_modificaciones.filas) {\n    if (f.estado === 'sin_modificacion') { if (mapDoc[f.documento] && mapDoc[f.documento] !== 'ficha') tabla.estadoDoc[mapDoc[f.documento]] = tabla.estadoDoc[mapDoc[f.documento]] || 'sin'; continue; }\n    const doc = mapDoc[f.documento] || 'ficha';\n    tabla.filas.push({ documento: doc, seccion: f.seccion_canonica || 'OTRA', estado: 'con', texto: recorte(f.resumen || f.seccion_original, 120),\n                       remiteDisposicion: !!f.remite_a_disposicion_aprobada, sinCambioCuantitativo: f.es_dato_de_calidad === false && f.seccion_canonica === 'COMPOSICION', fuente: 'IA' });\n    if (doc !== 'ficha') tabla.estadoDoc[doc] = 'con';\n  }\n  if (ia.tabla_modificaciones.declara_nueva_indicacion) tabla.nuevaInd = true;\n  tabla.origen = 'IA (respaldo)';\n}\nconst docsDeclarados = Object.keys(tabla.estadoDoc).filter(k => tabla.estadoDoc[k] === 'con');\nif (!tabla.filas.length && !docsDeclarados.length) {\n  objetar('SIN_TABLA', 'R-TAB-1', 'No se identificó la tabla de modificaciones (formulario 1.2 o declaración jurada de únicos cambios); no se puede verificar el alcance del trámite.');\n}\n\n// ════════════════ 6. TEXTOS: roles, dos versiones (CC + proyecto) y cambios por sección ════════════════\nconst SEC_TXT = [\n  ['COMPOSICION', /^(formula|composicion|composicion cuali)/], ['ACCION', /^accion terapeutica/],\n  ['INDICACIONES', /^(indicaciones|1\\.? ?¿?que es )/], ['PROPIEDADES', /^(caracteristicas farmacologicas|propiedades farmaco|farmacologia clinica)/],\n  ['POSOLOGIA', /^(posologia|dosis y administracion|modo de administracion|3\\.? ?¿?como (usar|se usa|se administra))/],\n  ['CONTRAINDICACIONES', /^contraindicaciones/], ['ADVERTENCIAS', /^(advertencias|precauciones|2\\.? ?¿?que necesita saber)/],\n  ['INTERACCIONES', /^interacciones/], ['POBLACIONES', /^(embarazo|lactancia|fertilidad|uso en poblaciones)/],\n  ['RAM', /^(reacciones adversas|efectos adversos|4\\.? ?posibles efectos adversos)/], ['SOBREDOSIS', /^sobredosi/],\n  ['ESTUDIOS', /^estudios clinicos/], ['PRESENTACION', /^(presentacion|contenido$|6\\.? ?contenido del envase)/],\n  ['CONSERVACION', /^(conservacion|condiciones de conservacion|almacenamiento|5\\.? ?conservacion de)/], ['ELABORADOR', /^elaborado (por|en)/],\n  ['PIE', /^(especialidad medicinal autorizada|director tecnico|titular:|fecha de ultima revision)/]];\nconst RUIDO = /IF-\\d{4}-\\d+-APN|^P[aá]gina \\d+|P[aá]gina firmada digitalmente|^CONTROL DE CAMBIOS$|^(Comentado|Commented)\\s*\\[|^(Con formato|Formatted):|Firmado digitalmente|Digitally signed|^Fecha de [uú]ltima revisi[oó]n/i;\nfunction secciones(t) {\n  const out = {}, globos = []; let sec = 'ENCABEZADO';\n  for (const linea of t.split('\\n')) {\n    const l = linea.trim();\n    if (/^(Comentado|Commented)\\s*\\[|^(Con formato|Formatted):/i.test(l)) { globos.push(sec); continue; }   // globo de Word: marca de cambio en la sección\n    if (!l || RUIDO.test(l)) continue;\n    const n = norm(l);\n    let h = SEC_TXT.find(([k, re]) => re.test(n) && (k === 'PIE' || k === 'ELABORADOR' || (n.length <= 70 && !/\\.$/.test(n))));\n    if (h && sec === 'PIE' && h[0] !== 'PIE') h = null;          // el pie legal cierra el texto\n    if (h) {\n      sec = h[0];\n      const soloEncabezado = sec !== 'PIE' && !(sec === 'ELABORADOR' && n.length > 16);\n      if (soloEncabezado) continue;\n    }\n    (out[sec] = out[sec] || []).push(n);\n  }\n  return { out, globos };\n}\nconst cantidades = lineas => unico((lineas || []).flatMap(l => [...l.matchAll(/([a-z][a-z0-9 \\-]{2,40}?)\\s+(\\d+(?:[.,]\\d+)?)\\s*(mg|mcg|g|ml|ui)\\b/g)].map(m => compacto(m[1]) + '=' + m[2].replace(',', '.') + m[3]))).sort().join('|');\nconst numCons = lineas => unico((lineas || []).join(' ').match(/\\d+(?:[.,]\\d+)?\\s*(?:°\\s?c|º\\s?c|meses|dias|horas)/g) || []).map(x => x.replace(/\\s/g, '')).sort().join('|');\nconst numPres = lineas => unico((lineas || []).join(' ').match(/\\d+(?:[.,]\\d+)?\\s*(?:ml|viales|jeringas|lapiceras|unidades)/g) || []).sort().join('|');\n\nconst textos = {};\nfor (const d of docs.filter(d => d.texto)) (textos[d.texto] = textos[d.texto] || []).push(d);\nconst cambios = [];      // {doc, seccion, base, tipo}\nconst resumenTextos = {};\nfor (const [x, lista] of Object.entries(textos)) {\n  const A = lista.filter(d => d.rol === 'aprobado'), CC = lista.filter(d => d.rol === 'control_cambios'), P = lista.filter(d => d.rol === 'proyecto');\n  resumenTextos[x] = { aprobado: A.map(d => d.archivo), control_cambios: CC.map(d => d.archivo), proyecto: P.map(d => d.archivo) };\n  for (const d of lista) if (d.rolNombre && d.rolNombre !== d.rol)\n    observar('ROL_NOMBRE', 'R-ROL-1', `«${d.archivo}»: el nombre sugiere ${d.rolNombre.replace('_', ' ')}, pero por contenido es ${d.rol.replace('_', ' ')} (${d.evidenciaRol.join(', ') || 'sin marcas de revisión'}). Se tomó el rol por contenido.`, d.archivo);\n  const p = P[P.length - 1];\n  const base = A[A.length - 1] || CC[CC.length - 1];\n  if (!p || !base) continue;\n  const SP = secciones(p.text), SB = secciones(base.text), sp = SP.out, sb = SB.out;\n  const baseEsCCB = !A.length && CC.length && compacto(CC[CC.length - 1].text.replace(/CONTROL DE CAMBIOS/g, '')) === compacto(p.text);\n  if (baseEsCCB) { observar('ALCANCE_NO_VERIFICABLE', 'R-ROL-3', `${NOMBRE_TEXTO[x]}: el control de cambios no muestra diferencias de texto con el proyecto (marcas solo visuales) y no se presentó el aprobado; el alcance no pudo verificarse por texto.`); continue; }\n  for (const s of unico([...Object.keys(sp), ...Object.keys(sb)])) {\n    const a = (sb[s] || []).join(' '), b = (sp[s] || []).join(' ');\n    // sin aprobado, el CC (estilo Word) conserva lo eliminado pero no distingue lo agregado: el globo de comentario marca la sección cambiada\n    const porGlobo = !A.length && SB.globos.includes(s);\n    if (compacto(a) === compacto(b) && !porGlobo) continue;\n    let tipo;\n    if (s === 'ENCABEZADO' || s === 'PIE') tipo = 'administrativo';\n    else if (s === 'COMPOSICION') tipo = cantidades(sb[s]) !== cantidades(sp[s]) ? 'calidad' : 'clinico';\n    else if (s === 'CONSERVACION') tipo = numCons(sb[s]) !== numCons(sp[s]) ? 'calidad' : 'clinico';\n    else if (s === 'PRESENTACION') tipo = numPres(sb[s]) !== numPres(sp[s]) ? 'calidad' : 'administrativo';\n    else if (s === 'ELABORADOR') tipo = 'calidad';\n    else tipo = 'clinico';\n    const agregado = compacto(b).length > compacto(a).length;\n    cambios.push({ doc: x, seccion: s, base: A.length ? 'aprobado→proyecto' : 'control de cambios→proyecto', tipo, agrega: agregado, archivo: p.archivo });\n  }\n}\n\n// R-DOC-2: cada texto declarado como modificado debe tener versión con control de cambios Y proyecto limpio\nconst docsConCambio = unico([...docsDeclarados, ...cambios.filter(c => c.tipo !== 'administrativo').map(c => c.doc)]);\nfor (const x of docsDeclarados) {\n  const r = resumenTextos[x] || { control_cambios: [], proyecto: [] };\n  if (!r.control_cambios.length) objetar('FALTA_CC', 'R-DOC-2', `${NOMBRE_TEXTO[x]}: declarado como modificado en la tabla, pero no se presentó la versión con control de cambios.`);\n  if (!r.proyecto.length) objetar('FALTA_P', 'R-DOC-2', `${NOMBRE_TEXTO[x]}: declarado como modificado en la tabla, pero no se presentó el proyecto limpio${r.control_cambios.length > 1 ? ' (el archivo presentado como proyecto conserva marcas de control de cambios)' : ''}.`);\n}\n\n// R-TAB-3: todo cambio detectable en los textos debe figurar en la tabla\nfunction declarado(c) {\n  return tabla.filas.some(f => f.seccion === c.seccion && (f.documento === c.doc || f.documento === 'ficha'));\n}\nconst noDeclarados = cambios.filter(c => c.tipo !== 'administrativo' && !declarado(c));\nfor (const c of noDeclarados)\n  objetar('NO_DECLARADO', 'R-TAB-3', `${NOMBRE_TEXTO[c.doc]} — sección ${c.seccion.toLowerCase()}: hay un cambio en el texto (${c.base}) que no figura en la tabla de modificaciones.`, c.archivo);\nconst admin = cambios.filter(c => c.tipo === 'administrativo');\nif (admin.length) informar('CAMBIOS_ADMIN', `Cambios administrativos detectados (no requieren fila en la tabla): ${unico(admin.map(c => NOMBRE_TEXTO[c.doc] + ' ' + c.seccion.toLowerCase())).join('; ')}.`);\nfor (const f of tabla.filas.filter(f => f.documento !== 'ficha' && CLINICAS.includes(f.seccion)))\n  if ((textos[f.documento] || []).some(d => d.rol === 'proyecto') && !cambios.some(c => c.doc === f.documento && c.seccion === f.seccion) && resumenTextos[f.documento]?.aprobado?.length)\n    observar('DECLARADO_NO_ENCONTRADO', 'R-TAB-2', `${NOMBRE_TEXTO[f.documento]} — ${f.seccion.toLowerCase()}: figura en la tabla pero no se detectó el cambio en el texto.`);\n\n// ════════════════ 7. NOTA ↔ TABLA (la nota no es DDJJ: solo observación) ════════════════\nconst notaDoc = porTipo('nota')[0];\nif (notaDoc) {\n  const L = notaDoc.text.split('\\n').map(norm);\n  let i0 = L.findIndex(l => /textos que se presentan|se presentan los siguientes|documentacion que se adjunta/.test(l));\n  const zona = i0 >= 0 ? L.slice(i0 + 1, i0 + 8).filter(l => /^[•\\-\\*·]|^\\d/.test(l) || docDeLinea(l)) : L.filter(l => /^[•\\-\\*·]/.test(l));\n  const enNota = unico(zona.map(docDeLinea).filter(x => x && x !== 'ficha'));\n  const enTabla = docsDeclarados;\n  const faltan = enTabla.filter(x => !enNota.includes(x)), sobran = enNota.filter(x => !enTabla.includes(x));\n  if (enNota.length && (faltan.length || sobran.length))\n    observar('NOTA_TABLA', 'R-TAB-4', `La nota de presentación no coincide con la tabla de modificaciones: ${faltan.length ? 'la nota no menciona ' + faltan.map(x => NOMBRE_TEXTO[x]).join(', ') : ''}${faltan.length && sobran.length ? '; ' : ''}${sobran.length ? 'la nota menciona ' + sobran.map(x => NOMBRE_TEXTO[x]).join(', ') + ' que no figura(n) en la tabla' : ''}. La nota no es declaración jurada: se toma la tabla como referencia.`, notaDoc.archivo);\n}\n\n// ════════════════ 8. RESUMEN CLÍNICO / NUEVA INDICACIÓN ════════════════\nconst rc = porTipo('resumen_clinico');\nconst nuevaIndicacion = tabla.nuevaInd || /nueva indicacion/.test(norm(notaDoc?.text || '')) || cambios.some(c => c.seccion === 'INDICACIONES' && c.doc === 'prospecto' && c.agrega);\nfor (const d of rc) informar('RC_RECIBIDO', `Se recibió resumen clínico (${d.idioma === 'en' ? 'en inglés' : 'en español'}); se informa como documentación adicional (plus).`, d.archivo);\nif (nuevaIndicacion && !rc.length) observar('SIN_RC', 'R-RC-1', 'El trámite incorpora una nueva indicación y no se adjuntó resumen clínico (Módulo 2.5/2.7). Observación no bloqueante.');\n\n// ════════════════ 9. ASIGNACIÓN Calidad / Clínica / Ambas ════════════════\nconst K = cambios.some(c => c.tipo === 'clinico') ||\n          tabla.filas.some(f => CLINICAS.includes(f.seccion)) ||\n          tabla.filas.some(f => f.seccion === 'COMPOSICION' && f.sinCambioCuantitativo);\nconst Cdiff = cambios.filter(c => c.tipo === 'calidad' && !(c.seccion === 'ELABORADOR' && tabla.filas.some(f => f.seccion === 'ELABORADOR' && f.remiteDisposicion)));\nconst Ctab = tabla.filas.filter(f => ['COMPOSICION', 'CONSERVACION', 'ELABORADOR', 'ESPECIFICACIONES'].includes(f.seccion) && !f.remiteDisposicion && !f.sinCambioCuantitativo);\nconst C = Cdiff.length > 0 || Ctab.length > 0;\nlet asignarA = K && C ? 'Ambas' : C ? 'Calidad' : K ? 'Clínica' : (docsConCambio.some(x => x !== 'rotulo') ? 'Clínica' : 'Calidad');\nconst fundamento = [];\nif (K) fundamento.push('cambios en textos clínicos (' + unico([...cambios.filter(c => c.tipo === 'clinico').map(c => c.seccion), ...tabla.filas.filter(f => CLINICAS.includes(f.seccion)).map(f => f.seccion)]).map(s => s.toLowerCase()).join(', ') + ')');\nif (C) fundamento.push('cambio de datos de calidad respecto del certificado/aprobado (' + unico([...Cdiff.map(c => c.seccion), ...Ctab.map(f => f.seccion)]).map(s => s.toLowerCase()).join(', ') + ')');\nif (!K && !C) fundamento.push('solo cambios administrativos; criterio por defecto según textos afectados');\n\n// Rama Calidad (secundaria, informativa): conserva la idea del validador v2 (documentación de soporte del Módulo 3)\nconst ramaCalidad = { aplica: asignarA !== 'Clínica' };\nif (ramaCalidad.aplica) {\n  const sop = porTipo('soporte_calidad');\n  ramaCalidad.soporte_modulo3 = sop.map(d => d.archivo);\n  ramaCalidad.resultado = sop.length ? 'Se identificó documentación de soporte de calidad (Módulo 3) para la evaluación de Calidad.' : 'No se identificó documentación de soporte del Módulo 3; Calidad deberá requerirla.';\n  if (!sop.length) observar('CALIDAD_SIN_SOPORTE', 'R-CAL-1', 'Derivación a Calidad: no se identificó documentación de soporte del Módulo 3 para el cambio de datos de calidad.');\n}\n\n// ════════════════ 10. DUPLICADOS Y OTROS HALLAZGOS (observaciones) ════════════════\nconst vistos = {};\nfor (const d of docs) { if (d.hash.length < 50) continue; if (vistos[d.hash]) observar('DUPLICADO', 'R-ROL-4', `«${d.archivo}» es idéntico a «${vistos[d.hash]}».`, d.archivo); else vistos[d.hash] = d.archivo; }\nfor (const d of docs.filter(d => d.tipo === 'otro')) observar('NO_RECONOCIDO', 'R-DOC-0', `No se pudo clasificar «${d.archivo}» como documento regulatorio conocido.`, d.archivo);\n\n// ════════════════ 11. DICTAMEN + salida compatible con la copia de prueba ════════════════\nconst esObjecion = objeciones.length > 0;\nconst dictamen = esObjecion ? 'Objetar' : 'Apto para evaluación';\nconst ahora = new Date(Date.now() - 3 * 3600 * 1000);\nconst pad = n => String(n).padStart(2, '0');\nconst ts = `${ahora.getUTCFullYear()}${pad(ahora.getUTCMonth() + 1)}${pad(ahora.getUTCDate())}_${pad(ahora.getUTCHours())}${pad(ahora.getUTCMinutes())}${pad(ahora.getUTCSeconds())}`;\nconst tsLeg = `${pad(ahora.getUTCDate())}/${pad(ahora.getUTCMonth() + 1)}/${ahora.getUTCFullYear()} ${pad(ahora.getUTCHours())}:${pad(ahora.getUTCMinutes())}:${pad(ahora.getUTCSeconds())} (ART UTC-3)`;\nconst meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];\nconst notaT = notaDoc?.text || '';\nconst motivo = recorte((notaT.match(/MOTIVO DEL TR[ÁA]MITE:?\\s*([\\s\\S]+?)(?:\\n\\s*\\n|Textos que se presentan|Se declara|$)/i) || [])[1] || campo(notaT, ['Ref\\\\.?']) || 'NO IDENTIFICADO', 400);\nconst iaSug = ia?.sugerencia || null;\nconst sal = {\n  version: VERSION,\n  asignar_a: asignarA,\n  dictamen,\n  resultado: esObjecion ? 'OBJECION' : 'VALIDACION',\n  nombreArchivo: esObjecion ? `informe_objecion_${ts}.docx` : `informe_validacion_${ts}.docx`,\n  plantillaKey: esObjecion ? 'objecion' : 'aceptable',\n  DIA: pad(ahora.getUTCDate()), MES: meses[ahora.getUTCMonth()], TIMESTAMP: tsLeg,\n  EXPEDIENTE: expedienteForm || campo(notaT, ['Expediente N[°ºo]\\\\.?', 'Expediente']) || 'NO IDENTIFICADO',\n  MOTIVO: motivo,\n  PRODUCTO: cert.nombre || campo(notaT, ['Nombre comercial']) || 'NO IDENTIFICADO',\n  EMPRESA: cert.titular || campo(notaT, ['Titular']) || 'NO IDENTIFICADO',\n  ASIGNAR_A: asignarA, DICTAMEN: dictamen,\n  DETALLE: esObjecion ? objeciones.map((o, i) => `${i + 1}. ${o.detalle}`).join(' ') : 'Sin objeciones formales.',\n  OBSERVACIONES: observaciones.map((o, i) => `${i + 1}. ${o.detalle}`).join(' '),\n  objeciones, observaciones, informacion,\n  fundamento_asignacion: fundamento.join('; '),\n  certificado: cert,\n  tabla_modificaciones: { origen: tabla.origen, ubicacion: tabla.fuentes, textos_declarados: docsDeclarados, filas: tabla.filas, nueva_indicacion: nuevaIndicacion },\n  textos: resumenTextos,\n  cambios_detectados: cambios.map(c => ({ ...c, declarado: c.tipo === 'administrativo' ? 'no requiere' : declarado(c) })),\n  documentos: docs.map(d => ({ archivo: d.archivo, tipo: d.tipo, rol: d.rol || null, idioma: d.idioma, clasificado_por: d.fuenteTipo, evidencia_rol: d.evidenciaRol || [] })),\n  rama_calidad: ramaCalidad,\n  extraccion_ia: { estado: iaEstado, sugerencia_asignacion: iaSug?.asignar_a || null, coincide_asignacion: iaSug?.asignar_a ? norm(iaSug.asignar_a) === norm(asignarA) : null,\n                   filas_tabla_ia: ia?.tabla_modificaciones?.filas?.length ?? null, filas_tabla_reglas: tabla.origen === 'reglas' ? tabla.filas.length : 0,\n                   modelo: raw._gemini?.modelo || null, fundamento: iaSug?.fundamento || null },\n  respuestaIA: ia ? JSON.stringify(ia) : '',\n  reglas_aplicadas: ['R-CERT-0 certificado obligatorio', 'R-CERT-3 congruencia con el certificado', 'R-IDI-1 idioma', 'R-TAB-1 tabla presente',\n                     'R-DOC-2 CC + proyecto por texto declarado', 'R-TAB-3 cambio no declarado', 'R-TAB-4 nota↔tabla (obs.)', 'R-RC-1 resumen clínico (obs.)',\n                     'R-ROL-1 rol por contenido (obs.)', 'R-ROL-3 alcance no verificable (obs.)', 'R-ROL-4 duplicados (obs.)', 'R-TAB-2 declarado no encontrado (obs.)', 'R-CAL-1 rama calidad (obs.)']\n};\nif (debug) sal._textos = agregado.data;\nreturn [{ json: sal }];\n"
+   }
+  },
+  {
+   "id": "461fce15-ecb3-46fb-91a3-5cf3fb13accb",
+   "name": "Generación Formulario",
+   "webhookId": "7c350775-48fb-4f88-8803-a70ccbfe7042",
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2.1,
+   "position": [
+    -3072,
+    240
+   ],
+   "parameters": {
+    "httpMethod": "POST",
+    "path": "validacion-ctd-clinica-4e9b2c",
+    "responseMode": "responseNode",
+    "options": {}
+   }
+  },
+  {
+   "id": "79fb56bb-3de4-4c85-9f03-1e4f50e1b564",
+   "name": "Code in JavaScript",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -2448,
+    304
+   ],
+   "parameters": {
+    "jsCode": "const item = $input.first();\nconst filename = (item.json.filename || '').toLowerCase();\n\nconst extensionesPermitidas = ['.pdf', '.jpg', '.jpeg', '.png', '.tiff', '.tif'];\nconst esValido = extensionesPermitidas.some(ext => filename.endsWith(ext));\n\nif (!esValido) {\n  const extension = filename.includes('.')\n    ? filename.split('.').pop().toUpperCase()\n    : 'desconocido';\n\n  // Marcamos el item como inválido pero lo dejamos pasar\n  // para que el pipeline llegue hasta respondToWebhook\n  return [{\n    json: {\n      ...item.json,\n      archivoInvalido: true,\n      mensajeError: `El archivo \"${item.json.filename}\" tiene formato .${extension} que no es compatible. Por favor convertilo a PDF antes de enviarlo.`\n    },\n    binary: item.binary\n  }];\n}\n\nreturn [{ json: { ...item.json, archivoInvalido: false }, binary: item.binary }];"
+   }
+  },
+  {
+   "id": "6a1bcbbd-4153-45ec-b18b-19d95f3235e0",
+   "name": "Pedido Gemini Extracción clínica",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -1624,
+    80
+   ],
+   "parameters": {
+    "jsCode": "// Arma el pedido de EXTRACCIÓN para el sub-workflow \"Gemini con rotación de claves (Hark)\" (kYDhcme8j6T8BZ7O).\n// Principio: Gemini solo extrae y sugiere; las reglas determinísticas del nodo siguiente deciden.\n// Si el formulario trae sin_ia=1 el sub-workflow no llama a Gemini (gemini.skip) y decide solo con reglas.\nconst docs = $('Obtener todos los textos').first().json.data || [];\nlet sinIA = false;\ntry { sinIA = !!$('Split archivos').first().json.sinIA; } catch (e) {}\n\n// Redacción mínima de datos personales antes de enviar a Gemini (firmas digitales, matrículas, mails, teléfonos)\nconst redactar = t => (t || '')\n  .replace(/(Firmado digitalmente por|Digitally signed by)[^\\n]*/gi, '$1 [REDACTADO]')\n  .replace(/\\b(M\\.?\\s?N\\.?|M\\.?\\s?P\\.?)\\s*\\d[\\d\\.]*/g, '[MATRÍCULA]')\n  .replace(/[\\w.+-]+@[\\w-]+\\.[\\w.]+/g, '[MAIL]')\n  .replace(/\\(?\\+?\\d{2,4}\\)?[\\s-]?\\d{3,4}[\\s-]\\d{4}\\b/g, '[TEL]');\n\nconst corpus = docs.map((d, i) => `### DOCUMENTO ${i + 1} — archivo: \"${d.fileName}\"\\n${redactar(d.text).slice(0, 20000)}`).join('\\n\\n');\n\nconst esquema = `{\n \"documentos\": [{\"archivo\": \"\", \"tipo_canonico\": \"nota|formulario|tabla_modificaciones|ddjj_cambios|ddjj_no_impactada|certificado|prospecto|info_paciente|rotulo|referencia_ema|referencia_fda|referencia_otra_agencia|resumen_clinico|soporte_calidad|publicacion|otro\",\n   \"rol\": \"aprobado|control_cambios|proyecto|no_aplica\", \"evidencia_rol\": [\"sello_IF|globos_comentario|encabezado_control_cambios|fechas_duplicadas|nombre_archivo|ninguna\"],\n   \"idioma_predominante\": \"es|en|otro\", \"producto_mencionado\": \"\"}],\n \"certificado\": {\"n_certificado\": \"\", \"titular\": \"\", \"nombre_comercial\": \"\", \"ifa\": \"\", \"concentracion\": \"\", \"forma_farmaceutica\": \"\", \"vida_util\": \"\", \"conservacion\": \"\", \"elaborador\": \"\"},\n \"nota\": {\"concepto_codigo\": \"\", \"motivo_tramite\": \"\", \"nombre_comercial\": \"\", \"ifa\": \"\", \"concentracion\": \"\", \"forma_farmaceutica\": \"\", \"n_certificado\": \"\", \"titular\": \"\",\n   \"textos_afectados\": {\"prospecto\": null, \"info_paciente\": null, \"rotulos\": null}},\n \"tabla_modificaciones\": {\"formato\": \"F1_texto_completo|F2_ficha_documento|F3_resumen_seccion|F4_ddjj_pagina|F5_narrativa|F6_externa|F7_legacy|ninguna\", \"ubicacion_archivo\": \"\",\n   \"filas\": [{\"documento\": \"prospecto|info_paciente|rotulo|ficha\", \"seccion_original\": \"\", \"seccion_canonica\": \"INDICACIONES|POSOLOGIA|CONTRAINDICACIONES|ADVERTENCIAS|INTERACCIONES|POBLACIONES|RAM|SOBREDOSIS|PROPIEDADES|ESTUDIOS|COMPOSICION|CONSERVACION|PRESENTACION|ELABORADOR|ESPECIFICACIONES|ADMINISTRATIVO|OTRA\",\n     \"estado\": \"con_modificacion|sin_modificacion\", \"resumen\": \"\", \"remite_a_disposicion_aprobada\": false, \"es_dato_de_calidad\": false}],\n   \"declara_nueva_indicacion\": false},\n \"sugerencia\": {\"asignar_a\": \"Calidad|Clínica|Ambas\", \"fundamento\": \"\", \"objeciones_posibles\": [\"\"], \"observaciones_posibles\": [\"\"]}\n}`;\n\nconst prompt = `Sos un asistente de extracción de datos para la validación FORMAL (no de fondo) de trámites de variación post-registro de productos biológicos ante ANMAT (concepto 2302: rótulos, prospectos e información para el paciente).\nRecibís el texto de todos los archivos de un expediente. NO decidas el dictamen: solo extraé datos literales y, al final, dejá una sugerencia no vinculante.\n\nInstrucciones:\n1. Clasificá cada documento por su CONTENIDO, no por el nombre del archivo. Rol: \"aprobado\" si lleva sello IF-AAAA-NNNNNNNN-APN-DECBR#ANMAT; \"control_cambios\" si tiene globos \"Comentado [..]\"/\"Commented [..]\", encabezado \"CONTROL DE CAMBIOS\" o fechas de revisión duplicadas/fusionadas; \"proyecto\" si es el texto limpio propuesto.\n2. Certificado REM: copiá literalmente nombre comercial, IFA, concentración, forma farmacéutica, titular (razón social) y N° de certificado.\n3. Nota de presentación: copiá los mismos datos tal como figuran en la nota, el motivo y qué textos dice presentar.\n4. Tabla de modificaciones (puede estar en el formulario 1.2, en una declaración jurada de \"únicos cambios\" o como ficha): una fila por sección declarada como modificada, con el documento al que pertenece y la sección normalizada a la lista canónica (conservá el rótulo original). Marcá estado \"sin_modificacion\" cuando la tabla diga SIN MODIFICACIÓN, N/A o \"no hay modificaciones\". Marcá es_dato_de_calidad=true si la fila cambia fórmula/excipientes (cantidades), elaborador, vida útil, conservación, especificaciones o envase. Marcá remite_a_disposicion_aprobada=true si la fila dice que el cambio ya fue aprobado por una disposición previa.\n5. Idioma: indicá el idioma predominante de cada documento.\n6. No inventes ni infieras: si un dato no está, dejalo vacío. No incluyas nombres de personas.\nRespondé SOLO con un JSON válido con este esquema:\n${esquema}\n\nEXPEDIENTE:\n${corpus}`;\n\nconst body = {\n  contents: [{ role: 'user', parts: [{ text: prompt }] }],\n  generationConfig: { responseMimeType: 'application/json', temperature: 0 }\n};\nreturn [{ json: { body, gemini: { check: 'json', prefer_key: 'C', purpose: 'ctd-validador-clinico', skip: sinIA } } }];\n"
+   }
+  },
+  {
+   "id": "30d03a73-4b0d-438e-b5f6-5727a1b5368d",
+   "name": "Gemini Extracción clínica",
+   "notes": "Sub-workflow Gemini con rotación (clave C Iname primero). Antes: HTTP gemini-2.5-flash.",
+   "type": "n8n-nodes-base.executeWorkflow",
+   "typeVersion": 1.2,
+   "onError": "continueRegularOutput",
+   "position": [
+    -1424,
+    240
+   ],
+   "parameters": {
+    "workflowId": {
+     "__rl": true,
+     "value": "kYDhcme8j6T8BZ7O",
+     "mode": "id"
+    },
+    "mode": "each",
+    "workflowInputs": {
+     "mappingMode": "defineBelow",
+     "value": {},
+     "matchingColumns": [],
+     "schema": [],
+     "attemptToConvertTypes": false,
+     "convertFieldsToString": true
+    },
+    "options": {
+     "waitForSubWorkflow": true
+    }
+   }
+  },
+  {
+   "id": "3a47c41d-e1f6-41a3-bc30-b4ebd12a28f2",
+   "name": "Pedido Gemini OCR",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -2376,
+    224
+   ],
+   "parameters": {
+    "jsCode": "// Arma el pedido de OCR para el sub-workflow \"Gemini con rotación de claves (Hark)\" (kYDhcme8j6T8BZ7O).\n// Antes el nodo HTTP mandaba el cuerpo vacío (sin la imagen). Ahora va la imagen inline + instrucción de transcripción.\n// Clave C (Iname) primero; A/B de respaldo. Gemini acepta PNG/JPEG/WEBP/HEIC (no TIFF/BMP).\nconst out = [];\nfor (let i = 0; i < $input.all().length; i++) {\n  const it = $input.all()[i];\n  const bin = (it.binary || {}).data || {};\n  const buf = await this.helpers.getBinaryDataBuffer(i, 'data');\n  let mime = bin.mimeType || 'image/jpeg';\n  if (mime === 'image/jpg') mime = 'image/jpeg';\n  out.push({ json: {\n    body: { contents: [{ role: 'user', parts: [\n      { text: 'Transcribí textualmente TODO el texto visible de este documento escaneado, en su idioma original, respetando el orden, tablas y saltos de línea. Devolvé solo el texto transcripto, sin comentarios ni resumen.' },\n      { inline_data: { mime_type: mime, data: buf.toString('base64') } },\n    ] }] },\n    gemini: { check: 'text', prefer_key: 'C', purpose: 'ctd-ocr' },\n    fileName: it.json.fileName || it.json.filename || '',\n  } });\n}\nreturn out;\n"
+   }
+  },
+  {
+   "id": "a2d877cd-9006-49ef-bcbb-221a70f83e3c",
+   "name": "Gemini Vision OCR",
+   "type": "n8n-nodes-base.executeWorkflow",
+   "typeVersion": 1.2,
+   "position": [
+    -2176,
+    384
+   ],
+   "parameters": {
+    "workflowId": {
+     "__rl": true,
+     "value": "kYDhcme8j6T8BZ7O",
+     "mode": "id"
+    },
+    "mode": "each",
+    "workflowInputs": {
+     "mappingMode": "defineBelow",
+     "value": {},
+     "matchingColumns": [],
+     "schema": [],
+     "attemptToConvertTypes": false,
+     "convertFieldsToString": true
+    },
+    "options": {
+     "waitForSubWorkflow": true
+    }
+   }
+  },
+  {
+   "id": "b6096995-009c-4a50-a346-7f0773d3a718",
+   "name": "Convertir imagen a PNG",
+   "type": "n8n-nodes-base.editImage",
+   "typeVersion": 1,
+   "position": [
+    -2596,
+    384
+   ],
+   "parameters": {
+    "operation": "rotate",
+    "rotate": 0,
+    "dataPropertyName": "data",
+    "options": {
+     "format": "png"
+    }
+   }
+  },
+  {
+   "id": "d4a7c6e9-b9e6-4286-a795-cd4a04f5cca6",
+   "name": "Responder JSON",
+   "type": "n8n-nodes-base.respondToWebhook",
+   "typeVersion": 1.1,
+   "position": [
+    -884,
+    240
+   ],
+   "parameters": {
+    "respondWith": "json",
+    "responseBody": "={{ JSON.stringify($json) }}",
+    "options": {}
+   }
+  },
+  {
+   "id": "faeca699-7627-4c7e-90ba-0f68ae6a2dc0",
+   "name": "Nota flujo clínico",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    -400,
+    -400
+   ],
+   "parameters": {
+    "width": 640,
+    "height": 300,
+    "content": "## IA Validación CTD — Clínica (prueba)\nCopia NUEVA de I9Vl0tJqJJgukDXd (v2 calidad, que no se toca). Webhook: `validacion-ctd-clinica-4e9b2c`.\nGemini (sub-workflow kYDhcme8j6T8BZ7O) solo EXTRAE con esquema JSON; el nodo **Reglas clínicas + ALCOA timestamp** decide con reglas JS:\nAsignar a Calidad / Clínica / Ambas + dictamen formal (Apto para evaluación / Objetar) + objeciones y observaciones.\nCampos del formulario: expediente, sin_ia=1 (solo reglas), debug=1 (devuelve textos).\nFuente: /workspace/work/clin_val (Hark)."
+   }
+  }
+ ],
+ "connections": {
+  "Split archivos": {
+   "main": [
+    [
+     {
+      "node": "Loop Over Items",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Loop Over Items": {
+   "main": [
+    [
+     {
+      "node": "Obtener todos los textos",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Code in JavaScript",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Detectar tipo archivo": {
+   "main": [
+    [
+     {
+      "node": "¿Necesita OCR?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "¿Necesita OCR?": {
+   "main": [
+    [
+     {
+      "node": "Convertir imagen a PNG",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Extract from File",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Gemini Vision OCR": {
+   "main": [
+    [
+     {
+      "node": "Merge",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Extract from File": {
+   "main": [
+    [
+     {
+      "node": "Merge",
+      "type": "main",
+      "index": 1
+     }
+    ]
+   ]
+  },
+  "Merge": {
+   "main": [
+    [
+     {
+      "node": "Normalizar texto",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Normalizar texto": {
+   "main": [
+    [
+     {
+      "node": "Loop Over Items",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Obtener todos los textos": {
+   "main": [
+    [
+     {
+      "node": "Pedido Gemini Extracción clínica",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Gemini Extracción clínica": {
+   "main": [
+    [
+     {
+      "node": "Reglas clínicas + ALCOA timestamp",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Reglas clínicas + ALCOA timestamp": {
+   "main": [
+    [
+     {
+      "node": "Responder JSON",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Generación Formulario": {
+   "main": [
+    [
+     {
+      "node": "Split archivos",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Code in JavaScript": {
+   "main": [
+    [
+     {
+      "node": "Detectar tipo archivo",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Pedido Gemini Extracción clínica": {
+   "main": [
+    [
+     {
+      "node": "Gemini Extracción clínica",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Pedido Gemini OCR": {
+   "main": [
+    [
+     {
+      "node": "Gemini Vision OCR",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Convertir imagen a PNG": {
+   "main": [
+    [
+     {
+      "node": "Pedido Gemini OCR",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "nodeGroups": [],
+ "settings": {
+  "executionOrder": "v1"
+ }
+}

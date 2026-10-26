@@ -1,0 +1,43 @@
+{
+ "seed": 7777,
+ "n": 60,
+ "dev": 21,
+ "test": 39,
+ "ground_truth_sha256": "39172ffc8b8bd558d5da19fe62ef627dd5b613dcb85b0e577e798d882eef67a2",
+ "generador_sha256": "7cd956104564724358a4797381aa7edc3d599806733d343fa61d82db4c1ea69b",
+ "escenarios": {
+  "completo_clinico": "Expediente clínico completo y coherente -> Clínica / APTO ",
+  "completo_estilo_b": "Completo; el control de cambios solo tiene resaltado (OCR del CC = proyecto) -> Clínica / APTO ",
+  "referencia_agencia": "Completo + referencia de agencia (label FDA en inglés o EPAR en español) -> Clínica / APTO [REF_AGENCIA]",
+  "nota_distinta_tabla": "La nota omite un texto que sí figura en la tabla (nota ≠ tabla) -> Clínica / APTO [NOTA_TABLA]",
+  "nueva_ind_sin_rc": "Nueva indicación sin resumen clínico -> Clínica / APTO [SIN_RC]",
+  "nueva_ind_con_rc": "Nueva indicación con resumen clínico 2.5 en español -> Clínica / APTO [RC_RECIBIDO]",
+  "calidad_pura": "Trámite de calidad puro (vida útil o conservación) que impacta textos -> Calidad / APTO ",
+  "solo_rotulos_calidad": "Solo rótulos: cambio de composición cuantitativa (dato característico) -> Calidad / APTO ",
+  "mixto": "Mixto: cambios clínicos + cambio de dato de calidad declarados -> Ambas / APTO ",
+  "excipiente_efecto_conocido": "Leyenda de excipientes con efecto conocido sin cambio de cantidades -> Clínica / APTO ",
+  "elaborador_por_disposicion": "Pie con elaborador actualizado según disposición ya aprobada -> Clínica / APTO ",
+  "archivos_mal_nombrados": "Nombres de archivo que no coinciden con el rol real (proyecto/CC/aprobado) -> Clínica / APTO [ROL_NOMBRE]",
+  "falta_cc": "Un texto declarado como modificado no trae versión con control de cambios -> Clínica / OBJETAR [FALTA_CC]",
+  "falta_proyecto": "Un texto declarado no trae proyecto limpio (falta o el 'proyecto' tiene marcas de CC) -> Clínica / OBJETAR [FALTA_P]",
+  "no_declarado": "Cambio clínico detectable en los textos que no figura en la tabla -> Clínica / OBJETAR [NO_DECLARADO]",
+  "calidad_no_declarado": "Tabla clínica, pero el proyecto cambia un dato de calidad no declarado -> Ambas / OBJETAR [NO_DECLARADO]",
+  "falta_certificado": "No se presenta el certificado REM -> Clínica / OBJETAR [FALTA_CERT]",
+  "incongruencia": "Dato identificatorio distinto del certificado (nombre, IFA, concentración, forma, titular o N° de certificado) -> Clínica / OBJETAR [INCONGRUENCIA]",
+  "documento_ingles": "Documento propio en inglés que no es referencia de agencia -> Clínica / OBJETAR [IDIOMA]",
+  "combinado": "Varias fallas a la vez (falta CC + documento en inglés) -> Clínica / OBJETAR [FALTA_CC,IDIOMA]"
+ },
+ "codigos": {
+  "FALTA_CERT": "objeción: falta certificado REM",
+  "FALTA_CC": "objeción: texto declarado sin versión con control de cambios",
+  "FALTA_P": "objeción: texto declarado sin proyecto limpio",
+  "NO_DECLARADO": "objeción: cambio en los textos no declarado en la tabla",
+  "INCONGRUENCIA": "objeción: dato identificatorio distinto del certificado",
+  "IDIOMA": "objeción: documento propio no en español",
+  "NOTA_TABLA": "observación: la nota no coincide con la tabla",
+  "SIN_RC": "observación: nueva indicación sin resumen clínico",
+  "ROL_NOMBRE": "observación: nombre de archivo no coincide con el rol por contenido",
+  "RC_RECIBIDO": "información: resumen clínico recibido",
+  "REF_AGENCIA": "información: referencia de agencia recibida"
+ }
+}

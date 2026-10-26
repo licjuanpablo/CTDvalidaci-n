@@ -1,0 +1,23 @@
+{
+ "congelado": "2026-10-25 13:40 ART (antes de correr TEST)",
+ "flujo": {
+  "id": "mHuLZEH72B2pkMFs",
+  "nombre": "IA Validación CTD — Clínica (prueba)",
+  "updatedAt": "2026-10-25T16:34:13.191Z",
+  "activo": true,
+  "nodos_sha256": "d96e2564961ae1a8b2e611d84cc311b589d44aa9a999d8b20ab7d5a35a383250",
+  "webhook": "https://server.licjuanpablo.com.ar/webhook/validacion-ctd-clinica-4e9b2c"
+ },
+ "reglas_clinicas_js_sha256": "645474d65e9055fa40c8e4c164479b58889f7663a0615bedb5fb35b8b869a595",
+ "pedido_gemini_js_sha256": "96d846c639f6c46a3deedcf616e2ac62ba0154ccfc90ea621a0980c0c571d3ac",
+ "subflujo_gemini": {
+  "id": "kYDhcme8j6T8BZ7O",
+  "updatedAt": "2026-10-25T05:03:36.725Z",
+  "nota": "compartido; modelo según cadena de respaldo (Config modelos)"
+ },
+ "ground_truth_sha256": "89898560760e640473a502937d88854b4d228301d5025ffc1a9eff1fc9ed4dfc",
+ "generador_sha256": "7cd956104564724358a4797381aa7edc3d599806733d343fa61d82db4c1ea69b",
+ "semilla": 2510,
+ "resultado_DEV": "DEV_v1_ia_20261025_163456: dictamen 21/21, asignación 21/21; DEV ampliado sin IA (semilla 7777, 60 casos): 60/60",
+ "criterios_aceptacion": "Fijados antes de TEST: sensibilidad y especificidad del dictamen >= 90 % y exactitud de asignación >= 90 % (estimación puntual), con IC95 Clopper-Pearson; TEST se corre una sola vez y no se modifica el sistema después."
+}
